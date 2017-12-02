@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Заявка на обратный звонок</title>
+    <meta charset="utf-8">
+
+    <style type="text/css">
+        body {
+            font-family: Verdana, sans-serif;
+        }
+
+        pre {
+            color: green;
+            font-family: "Courier New", sans-serif;
+        }
+
+        table td {
+            padding: 5px;
+        }
+        .title {
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<h3>Заявка на обратный звонок</h3>
+<p>Сайт: <a href="{site}" target="_blank">{site}</a></p>
+<table border="1">
+    <tr>
+        <td class="title">Имя:</td>
+        <td>{name}</td>
+    </tr>
+
+    <tr>
+        <td class="title">Телефон:</td>
+        <td>{tel}</td>
+    </tr>
+
+    <tr>
+        <td class="title">Email:</td>
+        <td>{email}</td>
+    </tr>
+
+    <tr>
+        <td class="title">Предпочтительное время:</td>
+        <td>{time}</td>
+    </tr>
+
+    <tr>
+        <td class="title">Комментарий:</td>
+        <td>{comment}</td>
+    </tr>
+
+    <tr>
+        <td class="title">Компания:</td>
+        <td>{company}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2"><i><small>(из соображений безопасности, не рекомендуется открывать ничего, кроме файлов изображений)</small></i></td>
+    </tr>
+
+    <tr>
+        <td class="title">Вложенный файл</td>
+        <td>{uploadFileName} [<a href="{uploadFileUrl}" target="_blank">скачать</a>]</td>
+    </tr>
+
+
+
+</table>
+<pre>
+    referrer : {referrer}
+    useragent : {useragent}
+    timezone : {timezone}
+    localtime : {localtime}
+</pre>
+
+<p>Разработано: <a href="http://kondraland.ru" target="_blank">kondraland.ru</a></p>
+
+</body>
+</html>
+

@@ -1,0 +1,27 @@
+{
+  "name": "email-notifier",
+  "description": "gulp_pug_sass_bem_boilerplate",
+  "main": "index.js",
+  "authors": [
+    "Artem Krivoshchekov"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-timepicker": "^0.5.2",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
+    "jquery": "^3.2.1",
+    "moment": "^2.18.1",
+    "bootstrap": "^3.3.7",
+    "jquery-ui": "^1.12.1",
+    "moment-timezone": "^0.5.13"
+  }
+}

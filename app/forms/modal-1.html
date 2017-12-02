@@ -1,0 +1,80 @@
+<!--region modal-->
+<div class="modal fade" id="callback" tabindex="-1" role="dialog" aria-labelledby="callback">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Заявка на обратный звонок</h4>
+            </div>
+            <div class="modal-body">
+                <form action="tc-email-notifier.php" method="post">
+                    <input type="hidden" value="call" name="mode" id="mode">
+                    <input type="hidden" name="useragent" id="useragent">
+                    <input type="hidden" name="referrer" id="referrer">
+                    <input type="hidden" name="timezone" id="timezone">
+                    <input type="hidden" name="localtime" id="localtime">
+
+                    <div class="form-group">
+                        <label for="name" class="control-label">Укажите ваше имя</label>
+                        <input type="text" id="name" name="name" class="form-control required">
+                        <span class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tel" class="control-label">Укажите телефон</label>
+                        <input type="tel" id="tel" name="tel" class="form-control required">
+                        <span class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="control-label">Укажите email</label>
+                        <input type="email" id="email" name="email" class="form-control required">
+                        <span class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="date" class="control-label">Выберите предпочтительную дату</label>
+                                <input type="date" id="date" name="date" class="form-control required">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="time" class="control-label">и время (МСК)</label>
+                                <input type="time" id="time" name="time" class="form-control required">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="form-group">-->
+                    <!--    <label for="other" class="control-label">Укажите email</label>-->
+                    <!--    <textarea id="other" name="other" class="form-control"></textarea>-->
+                    <!--    <span class="help-block"></span>-->
+                    <!--</div>-->
+
+                    <div class="form-check disabled">
+                        <label class="form-check-label">
+                            <input type="checkbox" id="approved" class="form-check-input required" name="approved">
+                            С условиями согласен
+                        </label>
+
+                        <span class="help-block"></span>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row" style="text-align: center">
+                    <div class="col-md-6">
+                        <div id="status"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                        <button type="button" class="btn btn-primary" id="submit">Отправить</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--endregion-->

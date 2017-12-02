@@ -1,0 +1,62 @@
+<!--region form-->
+<form action="tc-email-notifier.php" method="post" class="call-us-form form-inline">
+    <input type="hidden" value="call" name="mode" id="mode">
+    <input type="hidden" name="useragent" id="useragent">
+    <input type="hidden" name="referrer" id="referrer">
+    <input type="hidden" name="timezone" id="timezone">
+    <input type="hidden" name="localtime" id="localtime">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-group">
+                <input class="call-us-form__name form-control required" type="text" name="name" id="name"
+                       placeholder="Ваше имя"/>
+                <span class="help-block"></span>
+            </div>
+
+            <div class="input-group">
+                <input class="call-us-form__phone form-control required" type="tel" name="tel" id="tel"
+                       placeholder="Телефон"/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-group">
+                <input class="call-us-form__time form-control required" name="date" id="date" type="date"
+                       placeholder="Дата"/>
+                <span class="help-block"></span>
+            </div>
+
+            <div class="input-group">
+                <input class="call-us-form__time form-control required" name="time" id="time" type="time"
+                       placeholder="Время"/>
+                <span class="help-block"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="input-group form-check disabled">
+                <label class="form-check-label">
+                    <input type="checkbox" id="approved" class="form-check-input required" name="approved">
+                    С условиями согласен
+                </label>
+
+                <span class="help-block"></span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row delay">
+        <div class="col-md-12 justify-between vertical-align">
+            <p class="small-caption">и мы перезвоним Вам в любое удобное время</p>
+            <button type="button" class="button button-theme-b9" id="submit">Отправить</button>
+        </div>
+    </div>
+</form>
+<!--endregion-->
