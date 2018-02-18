@@ -14,6 +14,7 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 let paths = {
     build: '/build',
@@ -65,6 +66,11 @@ function getPlugins() {
                 postcss: [autoprefixer]
             }
         }));
+    } else {
+        plugins.push(new HtmlWebpackPlugin({
+            template: './app/index.html',
+            filename: './index.html' //relative to root of the application
+        }));
     }
 
     return plugins;
@@ -91,6 +97,10 @@ module.exports = {
     devServer: {
         host: 'localhost',
         port: 8081,
+        historyApiFallback: true,
+        hot: true,
+        inline: true,
+        progress: true,
     },
 
     devtool: isDev() ? 'cheap-inline-module-source-map' : false,

@@ -2,12 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <!-- inject:css --><!-- endinject -->
-
-    <script src="assets/js/main.js"></script>
-    <!-- inject:js --><!-- endinject -->
+    <title>Debug Field</title>
 
     <style>
         #callbackForm {
@@ -25,21 +20,6 @@
 <body>
 <header>
     <script>
-        $(document).ready(function () {
-            $('.btnCallbackForm').tcEmailNotifier({
-                'containerId': 'callback',
-                'submitButtonId': 'submit',
-                'backendUrl': 'tc-email-notifier.php',
-                'isModal': true
-            });
-
-            $('techcode').tcEmailNotifier({
-                'containerId': 'callbackForm',
-                'submitButtonId': 'submit',
-                'backendUrl': 'tc-email-notifier.php',
-                'isModal': false
-            });
-        });
     </script>
 </header>
 
@@ -48,10 +28,8 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
-                <!--button-->
-                <a class="btnCallbackForm">Открытьss форму</a>
-
-                //= forms/form-1.html
+                <p>test dssds2ewddss</p>
+                <form action="/send.php" id="callback"></form>
             </div>
         </div>
     </div>

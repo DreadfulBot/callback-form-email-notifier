@@ -10,6 +10,7 @@
     "bower": "^1.8.0",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "glyphicons": "^0.2.0",
+    "html-webpack-plugin": "^2.30.1",
     "inputmask": "^3.3.11",
     "jquery": "^3.3.1",
     "jquery.inputmask": "^3.3.4",
@@ -38,7 +39,7 @@
     "webpack-dev-server": "^2.11.1"
   },
   "scripts": {
-    "dev": "set NODE_ENV=development&&webpack-dev-server",
+    "dev": "set NODE_ENV=development&&webpack-dev-server --open --inline --hot",
     "build:prod": "set NODE_ENV=production&&yarn webpack",
     "build:dev": "set NODE_ENV=development&&yarn webpack",
     "deploy": "cd uploader&&tu-init-env.bat&&python tu-upload.py"
