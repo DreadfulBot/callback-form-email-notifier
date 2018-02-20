@@ -12,9 +12,9 @@ let fields = [
         placeholder: 'Введите свой email',
         errorTag: 'Неправильный email',
         required: true,
-        cssClass: '',
-        onClick: '',
-        onFocus: ''
+        cssClass: 'class',
+        onClick: () => { console.log('click'); },
+        onFocus: null
     },
     {
         titleTag: 'tel',
@@ -24,10 +24,21 @@ let fields = [
         placeholder: 'Введите свой телефон',
         errorTag: 'Неправильный телефон',
         required: true,
-        cssClass: '',
-        onClick: '',
-        onFocus: ''
+        cssClass: null,
+        onClick: () => { console.log('tel clicked'); },
+        onFocus: null
     }
 ];
 
-let t = new TcEmailNotifier('callback', '/index.php', true, fields);
+let options = {
+    formId: 'callback',
+    backendUrl: '/index.php',
+    isDebugMode: true,
+    onSuccess: () => { console.log('success'); },
+    onError: () => { console.log('error'); },
+    addHiddenFields: true,
+    addGeolocation: true,
+    googleMapsApiKey: 'AIzaSyCq7dRy7lNE3jJq68lD-DuSuyxOwfaDPqE'
+};
+
+let t = new TcEmailNotifier(options, fields);
