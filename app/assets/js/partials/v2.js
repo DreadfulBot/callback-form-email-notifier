@@ -5,6 +5,7 @@ require('moment/locale/ru');
 require('moment-timezone/builds/moment-timezone-with-data');
 
 export default class TcEmailNotifier {
+
     printObject(object) {
         Object.entries(object).forEach(([k, v]) => {
             if(v instanceof Object) {
@@ -33,6 +34,50 @@ export default class TcEmailNotifier {
         }
 
         this.createFields();
+        this.addFormBackendUrl();
+        this.addSubmitEventListener();
+    }
+
+    addFormBackendUrl() {
+        let formElement = document.querySelector(`#${this.options.formId}`);
+        formElement.setAttribute('action', '#');
+        formElement.setAttribute('method', 'post');
+    }
+
+    addSubmitEventListener() {
+        let formElement = document.querySelector(`#${this.options.formId}`);
+
+        let request = obj => {
+            return new Promise((resolve, reject) => {
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", this.options.backendUrl);
+                if (obj.headers) {
+                    Object.keys(obj.headers).forEach(key => {
+                        xhr.setRequestHeader(key, obj.headers[key]);
+                    });
+                }
+                xhr.onload = () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        resolve(xhr.response);
+                    } else {
+                        reject(xhr.statusText);
+                    }
+                };
+                xhr.onerror = () => reject(xhr.statusText);
+                xhr.send(obj.body);
+            });
+        };
+
+        formElement.addEventListener('submit', (e) => {
+            e.preventDefault();
+            request({body: new FormData(e.target)})
+                .then(answer => {
+                    this.options.onSuccess(answer);
+                })
+                .catch(error => {
+                    this.options.onError(error);
+                });
+        });
     }
 
     addFieldEventListener(field, fieldElement) {
@@ -115,11 +160,10 @@ export default class TcEmailNotifier {
     }
 
     addGeolocationCallBack(position, formElement) {
-        debugger;
         let geoFields = [
             {
                 name: 'geocoords',
-                value: position.coords
+                value: `lat:${position.coords.latitude};long:${position.coords.longitude}`
             },
             {
                 name: 'geomap',
@@ -134,6 +178,8 @@ export default class TcEmailNotifier {
             fieldElement.setAttribute('value', field.value);
             formElement.appendChild(fieldElement);
         });
+
+        console.log(geoFields[0])
     }
 
     htmlToElement(html) {
@@ -154,7 +200,7 @@ export default class TcEmailNotifier {
             if(this.d) console.log('[x] adding field ');
             this.printObject(field);
 
-            formElement.appendChild(this.htmlToElement(field.titleTag));
+            if(field.titleTag) formElement.appendChild(this.htmlToElement(field.titleTag));
 
             let fieldElement = document.createElement('input');
             fieldElement.setAttribute('id', field.id);
@@ -166,7 +212,8 @@ export default class TcEmailNotifier {
             if(field.required) fieldElement.required = true;
 
             formElement.appendChild(fieldElement);
-            formElement.appendChild(this.htmlToElement(field.errorTag));
+
+            if(field.errorTag) formElement.appendChild(this.htmlToElement(field.errorTag));
 
             this.formatField(field, fieldElement);
             this.addFieldEventListener(field, fieldElement);
