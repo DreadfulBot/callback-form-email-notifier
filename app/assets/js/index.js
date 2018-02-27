@@ -1,9 +1,7 @@
-require('../../../app/assets/css/main.scss');
-import TcEmailNotifier from './partials/v2';
-// import core from './partials/core'
-// document.querySelector('#callback').innerHTML += '<p>test</p>';
-// core();
+require('./../css/style.styl');
 import alertify from '../../../node_modules/alertifyjs/build/alertify.min'
+import TcEmailNotifier from './partials/v2';
+
 
 alertify.defaults.glossary.title = "Уведомление";
 
@@ -19,8 +17,7 @@ let fields = [
         cssClass: 'class',
         onClick: () => { console.log('click'); },
         onFocus: null
-    },
-    {
+    },{
         titleTag: 'tel',
         name: 'tel',
         id: 'tel',
@@ -31,8 +28,31 @@ let fields = [
         cssClass: null,
         onClick: () => { console.log('tel clicked'); },
         onFocus: null
-    },
-    {
+    },{
+        titleTag: 'Время',
+        name: 'time',
+        id: 'time',
+        type: 'text',
+        placeholder: 'Укажите предпочитаемое время',
+        errorTag: 'Неверное время',
+        required: true
+    },{
+        titleTag: 'Дата',
+        name: 'date',
+        id: 'date',
+        type: 'text',
+        placeholder: 'Укажите предпочитаемую дату',
+        errorTag: 'неверная дата',
+        required: true
+    },{
+        titleTag: 'Время',
+        name: 'time',
+        id: 'time',
+        type: 'text',
+        placeholder: 'Укажите предпочитаемое время',
+        errorTag: 'Неверное время',
+        required: true
+    },{
         titleTag: 'отправить',
         name: 'submit',
         id: 'submit',
@@ -50,11 +70,11 @@ let options = {
     formId: 'callback',
     backendUrl: 'tc-email-notifier.php',
     isDebugMode: true,
-    onSuccess: (message) => {  alertify.alert(message); },
-    onError: (message) => {  alertify.alert(message); },
     addHiddenFields: true,
     addGeolocation: true,
     googleMapsApiKey: 'AIzaSyCq7dRy7lNE3jJq68lD-DuSuyxOwfaDPqE',
+    onSuccess: (message) => {  alertify.alert(message); },
+    onError: (message) => {  alertify.alert(message); },
 };
 
-let t = new TcEmailNotifier(options, fields);
+new TcEmailNotifier(options, fields);

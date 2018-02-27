@@ -1,8 +1,8 @@
 import InputmaskPhone from 'inputmask/dist/inputmask/inputmask.phone.extensions';
 import InputmaskRegex from 'inputmask/dist/inputmask/inputmask.regex.extensions';
-import moment from 'moment/moment';
-require('moment/locale/ru');
-require('moment-timezone/builds/moment-timezone-with-data');
+import Moment from 'moment';
+import jstz from 'jstimezonedetect';
+import Picker from 'pickerjs';
 
 export default class TcEmailNotifier {
 
@@ -17,6 +17,7 @@ export default class TcEmailNotifier {
     }
 
     constructor(options, fields) {
+        Moment.locale('ru');
         this.options = options;
         this.fields = fields;
         this.d = this.options.isDebugMode ? this.options.isDebugMode : false;
@@ -88,7 +89,7 @@ export default class TcEmailNotifier {
 
     formatField(field, fieldElement) {
         let im;
-        switch (field.type) {
+        switch (field.name) {
             case 'email':
                 im = new InputmaskRegex({
                     mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
@@ -107,8 +108,18 @@ export default class TcEmailNotifier {
                 im.mask(fieldElement);
                 break;
             case 'tel':
-                im = new InputmaskPhone("+7 (999) 999-99-99");
+                im = new InputmaskPhone('+7 (999) 999-99-99');
                 im.mask(fieldElement);
+                break;
+            case 'time':
+                new Picker(fieldElement, {
+                    format: 'HH:mm'
+                });
+                break;
+            case 'date':
+                new Picker(fieldElement, {
+                   format: 'MM/DD/YYYY'
+                });
                 break;
         }
     }
@@ -131,11 +142,11 @@ export default class TcEmailNotifier {
             },
             {
                 name: 'timezone',
-                value: moment.tz.guess()
+                value: new jstz.determine().name()
             },
             {
                 name: 'localtime',
-                value: moment().toISOString()
+                value: new Moment().format()
             },
             {
                 name: 'cookies',

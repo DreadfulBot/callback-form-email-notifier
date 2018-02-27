@@ -22,6 +22,7 @@ let paths = {
     vendor: './vendor',
 
     appRoot: './app',
+    appBackend: './app/backend/',
     appJs: './app/assets/js/',
     appStyles: './app/assets/css/',
     appEmail: './app/email/',
@@ -33,7 +34,7 @@ function isDev() {
 }
 
 function getPlugins() {
-    let plugins = [
+    const plugins = [
         new webpack.DefinePlugin({
             NODE_ENV:   JSON.stringify(NODE_ENV),
             LANG:       JSON.stringify('ru'),
@@ -44,32 +45,30 @@ function getPlugins() {
                 verbose: true
             }),
         new ExtractTextPlugin({
-            filename: isDev() ? './[name][hash].css' : './tc-email-notifier.css',
+            filename: './tc-email-notifier.css',
         }),
-        // new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
+        new HtmlWebpackPlugin({
+            template: './app/index.html'
+        }),
         new CopyWebpackPlugin([
-            {from: paths.vendor, to: './vendor/'},
-            {from: paths.appEmail, to: './email/'},
-            {from: paths.appRoot + '/core.php', to: './tc-email-notifier.php'}
-        ]),
-        // new webpack.ProvidePlugin({
-        //     $: 'jquery',
-        //     jQuery: 'jquery',
-        //     "window.jQuery": "jquery",
-        // }),
+            {from: paths.vendor, to: 'vendor'},
+            {from: paths.appEmail, to: 'email'},
+            {from: paths.appBackend + '/core.php', to: 'tc-email-notifier.php'}
+        ])
     ];
 
-    if(!isDev()) {
+    if(isDev()) {
+        plugins.push(new HtmlWebpackPlugin({
+            template: './app/index.html'
+        }));
+    } else {
         plugins.push(new UglifyJsPlugin());
         plugins.push(new webpack.LoaderOptionsPlugin({
             minimize: true,
             options: {
                 postcss: [autoprefixer]
             }
-        }));
-    } else {
-        plugins.push(new HtmlWebpackPlugin({
-            template: './app/index.html'
         }));
     }
 
@@ -78,17 +77,16 @@ function getPlugins() {
 
 module.exports = {
 
-    /* main */
+
     context: __dirname,
     entry: {
         index: paths.appJs + '/index.js'
     },
     output: {
         path: __dirname + paths.build,
-        filename: isDev() ? './[name][hash].js' : './tc-email-notifier.js',
+        filename: './tc-email-notifier.js',
     },
 
-    /* devtools */
     watch: isDev(),
     watchOptions: {
         aggregateTimeout: 100
@@ -98,16 +96,12 @@ module.exports = {
         contentBase: './build',
         host: 'localhost',
         port: 8081,
-        historyApiFallback: true,
-        hot: false,
-        progress: true,
-        inline: false
     },
 
     devtool: isDev() ? 'cheap-inline-module-source-map' : 'inline-source-map',
 
-    /* plugins */
     plugins: getPlugins(),
+
     module: {
         rules : [{
             test: /\.js$/,
@@ -130,6 +124,13 @@ module.exports = {
             use: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
                 use: ['css-loader', 'sass-loader'],
+                publicPath: '../../'
+            })
+        }, {
+            test: /\.styl/,
+            use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: ['css-loader', 'stylus-loader'],
                 publicPath: '../../'
             })
         }, {
