@@ -36,7 +36,8 @@ function getPlugins() {
     let plugins = [
         new webpack.DefinePlugin({
             NODE_ENV:   JSON.stringify(NODE_ENV),
-            LANG:       JSON.stringify('ru')
+            LANG:       JSON.stringify('ru'),
+            isDev: isDev()
         }),
         new CleanWebpackPlugin(
             paths.buildRoot, {
@@ -45,17 +46,17 @@ function getPlugins() {
         new ExtractTextPlugin({
             filename: isDev() ? './[name][hash].css' : './tc-email-notifier.css',
         }),
-        new webpack.NoEmitOnErrorsPlugin(),
+        // new webpack.NoEmitOnErrorsPlugin(),
         new CopyWebpackPlugin([
             {from: paths.vendor, to: './vendor/'},
             {from: paths.appEmail, to: './email/'},
             {from: paths.appRoot + '/core.php', to: './tc-email-notifier.php'}
         ]),
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            "window.jQuery": "jquery",
-        }),
+        // new webpack.ProvidePlugin({
+        //     $: 'jquery',
+        //     jQuery: 'jquery',
+        //     "window.jQuery": "jquery",
+        // }),
     ];
 
     if(!isDev()) {
@@ -68,8 +69,7 @@ function getPlugins() {
         }));
     } else {
         plugins.push(new HtmlWebpackPlugin({
-            template: './app/index.html',
-            filename: './index.html' //relative to root of the application
+            template: './app/index.html'
         }));
     }
 
@@ -95,20 +95,21 @@ module.exports = {
     },
 
     devServer: {
+        contentBase: './build',
         host: 'localhost',
         port: 8081,
         historyApiFallback: true,
-        hot: true,
-        inline: true,
+        hot: false,
         progress: true,
+        inline: false
     },
 
-    devtool: isDev() ? 'cheap-inline-module-source-map' : false,
+    devtool: isDev() ? 'cheap-inline-module-source-map' : 'inline-source-map',
 
     /* plugins */
     plugins: getPlugins(),
     module: {
-        rules : [ {
+        rules : [{
             test: /\.js$/,
             loader: 'babel-loader'
         }, {

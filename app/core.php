@@ -78,13 +78,10 @@ try {
 
     $ini_array = parse_ini_file($base_path . "settings.ini", true);
 
-    // check captcha is valid
-    if(empty($params['g-recaptcha-response'])) {
-        throw new Exception("Подтвердите, что вы не робот");
-    }
-
-    if(!isCaptchaValid($params['g-recaptcha-response'], $ini_array['system']['googleAccessKey'])) {
-        throw new Exception("Подтвердите, что вы не робот");
+    if(isset($params['g-recaptcha-response'])) {
+        if(!isCaptchaValid($params['g-recaptcha-response'], $ini_array['system']['googleAccessKey'])) {
+            throw new Exception("Подтвердите, что вы не робот");
+        }
     }
 
     // detect mode

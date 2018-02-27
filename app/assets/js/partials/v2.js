@@ -49,6 +49,7 @@ export default class TcEmailNotifier {
 
         let request = obj => {
             return new Promise((resolve, reject) => {
+                debugger;
                 let xhr = new XMLHttpRequest();
                 xhr.open("POST", this.options.backendUrl);
                 if (obj.headers) {

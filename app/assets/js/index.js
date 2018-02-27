@@ -48,13 +48,13 @@ let fields = [
 
 let options = {
     formId: 'callback',
-    backendUrl: '/index.php',
+    backendUrl: 'tc-email-notifier.php',
     isDebugMode: true,
     onSuccess: (message) => {  alertify.alert(message); },
     onError: (message) => {  alertify.alert(message); },
     addHiddenFields: true,
     addGeolocation: true,
-    googleMapsApiKey: 'AIzaSyCq7dRy7lNE3jJq68lD-DuSuyxOwfaDPqE'
+    googleMapsApiKey: 'AIzaSyCq7dRy7lNE3jJq68lD-DuSuyxOwfaDPqE',
 };
 
 let t = new TcEmailNotifier(options, fields);
