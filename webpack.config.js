@@ -54,7 +54,7 @@ function getPlugins() {
         new CopyWebpackPlugin([
             {from: paths.vendor, to: 'vendor'},
             {from: paths.appEmail, to: 'email'},
-            {from: paths.appBackend + '/core.php', to: 'tc-email-notifier.php'}
+            {from: paths.appBackend + '/core.php', to: './backend/core.php'}
         ])
     ];
 
@@ -76,8 +76,6 @@ function getPlugins() {
 }
 
 module.exports = {
-
-
     context: __dirname,
     entry: {
         index: paths.appJs + '/index.js'

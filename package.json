@@ -7,7 +7,6 @@
     "alertifyjs": "^1.11.0",
     "bootstrap": "^3.3",
     "inputmask": "^3.3.11",
-    "jquery.inputmask": "^3.3.4",
     "jstimezonedetect": "^1.0.6",
     "moment": "^2.20.1",
     "pickerjs": "^0.2.0",

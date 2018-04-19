@@ -78,21 +78,21 @@ try {
 
     $ini_array = parse_ini_file($base_path . "settings.ini", true);
 
-    if(isset($params['g-recaptcha-response'])) {
-        if(!isCaptchaValid($params['g-recaptcha-response'], $ini_array['system']['googleAccessKey'])) {
-            throw new Exception("Подтвердите, что вы не робот");
-        }
-    }
+//    if(isset($params['g-recaptcha-response'])) {
+//        if(!isCaptchaValid($params['g-recaptcha-response'], $ini_array['system']['googleAccessKey'])) {
+//            throw new Exception("Подтвердите, что вы не робот");
+//        }
+//    }
 
     // detect mode
-    if(empty($params['mode'])) {
+    if(!isset($params['mode'])) {
         throw new Exception('Не удалось определить тип запроса');
     }
 
     $mode = $params['mode'];
 
     // detect template
-    if(empty($ini_array['template'][$mode])) {
+    if(!isset($ini_array['template'][$mode])) {
         throw new Exception('Не удалось определить шаблон сообщения');
     }
 
@@ -105,22 +105,24 @@ try {
     $message_template = file_get_contents($base_path . $message_template);
 
     //detect template params
-    if(empty($ini_array['template'][$mode.'ParamsRequired'])) {
+    if(!isset($ini_array['template'][$mode.'ParamsRequired'])) {
         throw new Exception('Не удалось определить обязательные параметры для шаблона сообщения');
     }
 
-    $required_message_params = json_decode($ini_array['template'][$mode.'ParamsRequired']);
-    $optional_message_params = json_decode($ini_array['template'][$mode.'ParamsOptional']);
+    $required_params = explode(',', $ini_array['template'][$mode.'ParamsRequired']);
+    $optional_params = explode(',', $ini_array['template'][$mode.'ParamsOptional']);
     $params['site'] = $ini_array['system']['site'];
 
     // check template params exists
-    foreach ($required_message_params as $message_param) {
-        if(empty($params[$message_param])) {
-            throw new Exception($message_param . ' - значение не может быть пустым');
+    foreach ($required_params as $param_name) {
+        if(!isset($params[$param_name])) {
+            throw new Exception($param_name . ' - значение не может быть пустым');
         }
     }
 
     // move upload file
+    // you should get moveduploadfileurl
+    // before params bindings
     $fileName = getMovedUploadFileUrl($ini_array['system']['uploadDir'], $ini_array['system']['site']);
     if($fileName) {
         $params["uploadFileUrl"] = $fileName;
@@ -131,21 +133,21 @@ try {
     }
 
     // bind required params in template
-    foreach ($required_message_params as $message_param) {
+    foreach ($required_params as $param_name) {
         $message_template =
-            str_replace('{'.$message_param.'}', $params[$message_param], $message_template);
+            str_replace('{'.$param_name.'}', $params[$param_name], $message_template);
     }
 
     // bind optional params in template
     $key = '';
-    foreach ($optional_message_params as $message_param) {
-        $key = '{'.$message_param.'}';
-        if(!empty($params[$message_param])) {
-            $message_template =
-                str_replace($key, $params[$message_param], $message_template);
-        } else {
+    foreach ($optional_params as $param_name) {
+        $key = '{'.$param_name.'}';
+        if(!isset($params[$param_name])) {
             $message_template =
                 str_replace($key, 'X', $message_template);
+        } else {
+            $message_template =
+                str_replace($key, $params[$param_name], $message_template);
         }
     }
 
@@ -153,7 +155,7 @@ try {
     $from = $ini_array['sender']['from'];
     $subject = $ini_array['sender']['title'];
 
-    foreach (json_decode($ini_array['receiver']['to']) as $to) {
+    foreach (explode(',', $ini_array['receiver']['to']) as $to) {
         try {
             $mail = new Message();
 

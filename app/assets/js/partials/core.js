@@ -1,231 +1,273 @@
-/*
- * [techcode email notifier]
- * author: Artem Krivoshchekov [zorg1995@yandex.ru]
- * all rights reserved
- * 07.08.2017
- */
+import InputmaskPhone from 'inputmask/dist/inputmask/inputmask.phone.extensions';
+import InputmaskRegex from 'inputmask/dist/inputmask/inputmask.regex.extensions';
+import Moment from 'moment';
+import jstz from 'jstimezonedetect';
+import Picker from 'pickerjs';
 
+export default class TcEmailNotifier {
 
-import Inputmask from 'inputmask/dist/inputmask/inputmask.phone.extensions';
-import moment from 'moment/moment';
-import alertify from 'alertifyjs/build/alertify.min'
+    printObject(object) {
+        Object.entries(object).forEach(([k, v]) => {
+            if(v instanceof Object) {
+                this.printObject(v);
+            } else {
+                console.log(k + ' - ' + v);
+            }
+        });
+    }
 
-require('moment/locale/ru');
-require('moment-timezone/builds/moment-timezone-with-data');
-require('../../css/main.scss');
+    constructor(options, fields) {
+        Moment.locale('ru');
+        this.options = options;
+        this.fields = fields;
+        this.d = this.options.isDebugMode ? this.options.isDebugMode : false;
 
-export default function () {
-    (function ($) {
-        let options;
-
-        function isEmpty(value) {
-            return typeof value === 'string' && !value.trim() || typeof value === 'undefined' || value === null;
+        if(this.d) {
+            console.log('[x] options are: ');
+            this.printObject(this.options);
         }
 
-        let methods = {
-            init: function (options) {
-                // check is already init
-                let init = this.data('tcEmailNotifier');
+        if(this.d) {
+            console.log('[x] fields are: ');
+            this.fields.forEach((field) => {
+                this.printObject(field);
+            });
+        }
 
-                if (init) {
-                    return this;
-                } else {
-                    this.data('tcEmailNotifier', true);
+        this.createFields();
+        this.addFormBackendUrl();
+        this.addSubmitEventListener();
+    }
+
+    addFormBackendUrl() {
+        let formElement = document.querySelector(`#${this.options.formId}`);
+        formElement.setAttribute('action', '#');
+        formElement.setAttribute('method', 'post');
+    }
+
+    addSubmitEventListener() {
+        let formElement = document.querySelector(`#${this.options.formId}`);
+
+        let request = obj => {
+            return new Promise((resolve, reject) => {
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", this.options.backendUrl);
+                if (obj.headers) {
+                    Object.keys(obj.headers).forEach(key => {
+                        xhr.setRequestHeader(key, obj.headers[key]);
+                    });
                 }
-
-                // init settings
-                this.options = $.extend({
-                    'containerId': '',
-                    'submitButtonId': '',
-                    'backendUrl' : '',
-                    'isModal' : false
-                }, options);
-
-                // init listeners
-                this.tcEmailNotifier('initListeners');
-            },
-
-            initListeners: function () {
-                // init needed fields
-                this.options.context = this.tcEmailNotifier;
-                this.options.container = '#' + this.options.containerId;
-                this.options.$container = $(this.options.container);
-                this.options.$form = $(this.options.$container).find('form');
-                this.options.$btnSubmit = $(this.options.$container).find('#' + this.options.submitButtonId);
-
-                // placing open-modal listener
-                if(this.options.isModal) {
-                    this.attr('data-toggle', 'modal');
-                    this.attr('data-target', this.options.container);
-                }
-
-                // tel mask
-                let im = new Inputmask("+7 (999) 999-99-99");
-                im.mask($(this.options.$form).find('input[type=tel]'));
-
-                // email mask
-                im = new Inputmask('email');
-                im.mask($(this.options.$form).find('input[type=email]'));
-
-                // date and time mask
-                $(this.options.$form).find('input[id=datetime]').datetimepicker({
-                    locale: 'ru'
-                });
-
-                alertify.defaults.glossary.title = "Уведомление";
-
-                //extras user data
-                $(this.options.$form).find('input[id=useragent]').val(isEmpty(navigator.userAgent) ? "empty" : navigator.userAgent);
-                $(this.options.$form).find('input[id=referrer]').val(isEmpty(document.referrer) ? "empty" : document.referrer);
-                $(this.options.$form).find('input[id=timezone]').val(isEmpty(moment.tz.guess()) ? "empty" : moment.tz.guess());
-                $(this.options.$form).find('input[id=localtime]').val(isEmpty(moment().toISOString()) ? "empty" : moment().toISOString());
-
-                // placing modal-submit event button
-                $(this.options.$btnSubmit).on('click', {options: this.options}, function (e) {
-                    // remove all error messages from form
-                    e.data.options.context('clearErrors', {options: e.data.options});
-
-                    // validate all input data
-                    let error = e.data.options.context('validateData', {options: e.data.options});
-
-                    // if any errors - show it on form
-                    // else - submit form to backend
-                    if(error.length > 0) {
-                        e.data.options.context('showErrors', {options: e.data.options, error : error});
+                xhr.onload = () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        resolve(xhr.response);
                     } else {
-                        // send data to backend through ajax request
-                        e.data.options.context('submitData', {data: e.data.options.$form.serializeArray(), options: e.data.options});
+                        reject(xhr.statusText);
                     }
-                });
-            },
-
-            closeModal : function (e) {
-                setTimeout(function() {
-                    $(e).modal('toggle');
-                }, 500);
-            },
-
-            notify: function (data) {
-                console.log(data);
-                let message = data.error;
-
-                if(data.status) {
-                    alertify.message(message);
-                } else {
-                    alertify.error(message);
-                }
-            },
-
-            submitData : function (e) {
-                let form_data = new FormData();
-                let file_data = (e.options.$form).find("input:file").prop('files')[0];
-
-                $.each(e.data, function (field, value) {
-                    form_data.append(value.name, value.value);
-                });
-
-                form_data.append('file', file_data);
-
-                $.ajax({
-                    dataType: "json",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: "POST",
-
-                    data: form_data,
-                    url: e.options.backendUrl
-                }).done(function (data) {
-                    e.options.context('notify', data);
-                    if(e.options.isModal === true) {
-                        e.options.context('closeModal', e.options.$container);
-                    }
-
-                }).fail(function (data) {
-                    if(data.error === undefined && data.statusText !== null) {
-                        data.error = data.statusText;
-                    } else {
-                        data.error = "unknown error";
-                    }
-
-                    e.options.context('notify', data);
-                    if(e.options.isModal === true) {
-                        e.options.context('closeModal', e.options.$container);
-                    }
-                });
-            },
-
-            showErrors : function (e) {
-                $.each(e.error, function (index, error) {
-                    let $field = e.options.$form.find('#' + error.id);
-                    if($field.attr('type') === "checkbox") {
-                        $field.parent().parent().addClass('has-error');
-                        $field.parent().parent().find('.help-block').text(error.error);
-                    } else {
-                        $field.parent().addClass('has-error');
-                        $field.parent().find('.help-block').text(error.error);
-                    }
-                });
-            },
-
-            clearErrors : function (e) {
-                let form = e.options.$form;
-
-                // required fields
-                $.each($(form).find('.required'), function (index, field) {
-                    $field = $(field);
-
-                    if($field.attr('type') === "checkbox") {
-                        $field.parent().parent().removeClass('has-error');
-                        $field.parent().parent().find('.help-block').text('');
-                    } else {
-                        $field.parent().removeClass('has-error');
-                        $field.parent().find('.help-block').text('');
-                    }
-                });
-            },
-
-            validateData: function (e) {
-
-                let form = e.options.$form;
-                let error = [];
-
-                // check for required
-                $.each($(form).find('.required'), function (index, field) {
-                    $field = $(field);
-                    switch (field.type) {
-                        case 'text':
-                        case 'tel':
-                        case 'email':
-                        case 'date':
-                        case 'time':
-                        case 'textarea':
-                            if(isEmpty($field.val())) {
-                                error.push({id:field.id, error:"поле не может быть пустым"});
-                            }
-                            break;
-                        case 'checkbox':
-                            if($field.prop('checked') === false) {
-                                error.push({id:field.id, error:"необходимо принять условия"});
-                            }
-                            break;
-                    }
-                });
-
-                return error;
-            }
+                };
+                xhr.onerror = () => reject(xhr.statusText);
+                xhr.send(obj.body);
+            });
         };
 
-        $.fn.tcEmailNotifier = function (method) {
-            // логика вызова метода
-            if (methods[method]) {
-                return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-            } else if (typeof method === 'object' || !method) {
-                return methods.init.apply(this, arguments);
+        formElement.addEventListener('submit', (e) => {
+            e.preventDefault();
+            request({body: new FormData(e.target)})
+                .then(answer => {
+                    this.options.onSuccess(answer);
+                })
+                .catch(error => {
+                    this.options.onError(error);
+                });
+        });
+    }
+
+    addFieldEventListener(field, fieldElement) {
+        if(field.onClick) fieldElement.onclick = field.onClick;
+        if(field.onFocus) fieldElement.onfocus = field.onFocus;
+    }
+
+    formatField(field, fieldElement) {
+        let im;
+        switch (field.name) {
+            case 'email':
+                debugger;
+                im = new InputmaskRegex({
+                    mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+                    greedy: false,
+                    onBeforePaste: (pastedValue, opts) => {
+                        pastedValue = pastedValue.toLowerCase();
+                        return pastedValue.replace("mailto:", "");
+                    },
+                    definitions: {
+                        '*': {
+                            validator: "[0-9A-Za-zА-Яа-я!#$%&'*+/=?^_`{|}~\-]",
+                            casing: "lower"
+                        }
+                    }
+                });
+                im.mask(fieldElement);
+                break;
+            case 'tel':
+                im = new InputmaskPhone('+7 (999) 999-99-99');
+                im.mask(fieldElement);
+                break;
+            case 'time':
+                new Picker(fieldElement, {
+                    format: 'HH:mm'
+                });
+                break;
+            case 'date':
+                new Picker(fieldElement, {
+                    format: 'MM/DD/YYYY'
+                });
+                break;
+        }
+    }
+
+    createHiddenField() {
+        let fieldElement = document.createElement('input');
+        fieldElement.setAttribute('type', 'hidden');
+        return fieldElement;
+    }
+
+    addHiddenFields(formElement) {
+        let hiddenFields = [
+            {
+                name: 'useragent',
+                value: navigator.userAgent
+            },
+            {
+                name: 'referrer',
+                value: document.referrer
+            },
+            {
+                name: 'timezone',
+                value: new jstz.determine().name()
+            },
+            {
+                name: 'localtime',
+                value: new Moment().format()
+            },
+            {
+                name: 'cookies',
+                value: document.cookie
+            }
+        ];
+
+        hiddenFields.forEach((field) => {
+            let fieldElement = this.createHiddenField();
+            fieldElement.setAttribute('id', field.name);
+            fieldElement.setAttribute('name', field.name);
+            fieldElement.setAttribute('value', field.value);
+            formElement.appendChild(fieldElement);
+        });
+    }
+
+    addGeolocation(formElement) {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                this.addGeolocationCallBack(position, formElement);
+            });
+        }
+    }
+
+    addGeolocationCallBack(position, formElement) {
+        let geoFields = [
+            {
+                name: 'geocoords',
+                value: `lat:${position.coords.latitude};long:${position.coords.longitude}`
+            },
+            {
+                name: 'geomap',
+                value: `https://maps.googleapis.com/maps/api/staticmap?center=${position.coords.latitude + "," + position.coords.longitude}&zoom=14&size=400x300&sensor=false&key=${this.options.googleMapsApiKey}`
+            }
+        ];
+
+        geoFields.forEach((field) => {
+            let fieldElement = this.createHiddenField();
+            fieldElement.setAttribute('id', field.name);
+            fieldElement.setAttribute('name', field.name);
+            fieldElement.setAttribute('value', field.value);
+            formElement.appendChild(fieldElement);
+        });
+
+        console.log(geoFields[0])
+    }
+
+    htmlToElement(html) {
+        let template = document.createElement('template');
+        html = html.trim();
+        template.innerHTML = html;
+        return template.content.firstChild;
+    }
+
+    addRecaptchaButton(formElement) {
+        let script = document.createElement('script');
+        script.src = 'https://www.google.com/recaptcha/api.js';
+        document.body.appendChild(script);
+
+        let button = document.createElement('div');
+        button.classList.add('g-recaptcha');
+        button.setAttribute('data-sitekey', this.options.googleMapsApiKey);
+
+        formElement.appendChild(button);
+    }
+
+    createFields() {
+        if(this.d) {
+            console.log('createFields');
+        }
+
+        let formElement = document.querySelector(`#${this.options.formId}`);
+
+        this.fields.forEach((field) => {
+            if(this.d) {
+                console.log('[x] adding field ');
+                this.printObject(field);
+            }
+
+            /* forming field element */
+            let fieldElement = document.createElement('input');
+            fieldElement.setAttribute('id', field.id);
+            fieldElement.setAttribute('type', field.type);
+            fieldElement.setAttribute('name', field.name);
+
+            if(field.placeholder) fieldElement.setAttribute('placeholder', field.placeholder);
+            if(field.cssClass) fieldElement.setAttribute('class', field.cssClass);
+            if(field.required) fieldElement.required = true;
+            if(field.value) fieldElement.value = field.value;
+
+            /* adding it to area */
+            let elementArea = document.createElement('div');
+            elementArea.setAttribute('id', field.id);
+            elementArea.appendChild(fieldElement);
+
+            if(field.titleTag) elementArea.appendChild(this.htmlToElement(field.titleTag));
+            if(field.errorTag) elementArea.appendChild(this.htmlToElement(field.errorTag));
+
+            /* grouping by areas */
+            if(field.parentClass) {
+                let block = formElement.querySelector(`.${field.parentClass}`);
+
+                if(!block) {
+                    block = document.createElement('div');
+                    block.classList.add(field.parentClass);
+                    formElement.appendChild(block);
+                }
+
+                block.appendChild(elementArea);
             } else {
-                $.error('Метод с именем ' + method + ' не существует для jQuery.tcEmailNotifier');
+                formElement.appendChild(elementArea);
             }
-        };
 
-    })(jQuery);
+            this.formatField(field, fieldElement);
+            this.addFieldEventListener(field, fieldElement);
+        });
+
+        if(this.options.addHiddenFields) this.addHiddenFields(formElement);
+        if(this.options.addGeolocation) this.addGeolocation(formElement);
+        if(this.options.addRecaptchaButton) this.addRecaptchaButton(formElement);
+    }
+
+
 }
