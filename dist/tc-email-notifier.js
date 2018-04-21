@@ -4,6 +4,9 @@ import Moment from 'moment';
 import jstz from 'jstimezonedetect';
 import Picker from 'pickerjs';
 
+require("../../node_modules/alertifyjs/build/css/alertify.min.css");
+require("../../node_modules/pickerjs/dist/picker.min.css");
+
 export default class TcEmailNotifier {
 
     printObject(object) {
@@ -81,7 +84,7 @@ export default class TcEmailNotifier {
         });
     }
 
-    addFieldEventListener(field, fieldElement) {
+    static addFieldEventListener(field, fieldElement) {
         if(field.onClick) fieldElement.onclick = field.onClick;
         if(field.onFocus) fieldElement.onfocus = field.onFocus;
     }
@@ -124,7 +127,7 @@ export default class TcEmailNotifier {
         }
     }
 
-    createHiddenField() {
+    static createHiddenField() {
         let fieldElement = document.createElement('input');
         fieldElement.setAttribute('type', 'hidden');
         return fieldElement;
@@ -155,7 +158,7 @@ export default class TcEmailNotifier {
         ];
 
         hiddenFields.forEach((field) => {
-            let fieldElement = this.createHiddenField();
+            let fieldElement = TcEmailNotifier.createHiddenField();
             fieldElement.setAttribute('id', field.name);
             fieldElement.setAttribute('name', field.name);
             fieldElement.setAttribute('value', field.value);
@@ -184,7 +187,7 @@ export default class TcEmailNotifier {
         ];
 
         geoFields.forEach((field) => {
-            let fieldElement = this.createHiddenField();
+            let fieldElement = TcEmailNotifier.createHiddenField();
             fieldElement.setAttribute('id', field.name);
             fieldElement.setAttribute('name', field.name);
             fieldElement.setAttribute('value', field.value);
@@ -194,7 +197,7 @@ export default class TcEmailNotifier {
         console.log(geoFields[0])
     }
 
-    htmlToElement(html) {
+    static htmlToElement(html) {
         let template = document.createElement('template');
         html = html.trim();
         template.innerHTML = html;
@@ -242,8 +245,8 @@ export default class TcEmailNotifier {
             elementArea.setAttribute('id', field.id);
             elementArea.appendChild(fieldElement);
 
-            if(field.titleTag) elementArea.appendChild(this.htmlToElement(field.titleTag));
-            if(field.errorTag) elementArea.appendChild(this.htmlToElement(field.errorTag));
+            if(field.titleTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.titleTag));
+            if(field.errorTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.errorTag));
 
             /* grouping by areas */
             if(field.parentClass) {
@@ -261,7 +264,7 @@ export default class TcEmailNotifier {
             }
 
             this.formatField(field, fieldElement);
-            this.addFieldEventListener(field, fieldElement);
+            TcEmailNotifier.addFieldEventListener(field, fieldElement);
         });
 
         if(this.options.addHiddenFields) this.addHiddenFields(formElement);

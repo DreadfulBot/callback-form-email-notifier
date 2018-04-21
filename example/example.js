@@ -1,6 +1,6 @@
-require('./../css/style.styl');
-import alertify from '../../../node_modules/alertifyjs/build/alertify.min'
-import TcEmailNotifier from './partials/core';
+require('./style.styl');
+import alertify from '../node_modules/alertifyjs/build/alertify.min'
+import TcEmailNotifier from '../src/assets/core';
 
 alertify.defaults.glossary.title = "Уведомление";
 
