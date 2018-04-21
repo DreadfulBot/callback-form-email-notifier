@@ -4,8 +4,8 @@ import Moment from 'moment';
 import jstz from 'jstimezonedetect';
 import Picker from 'pickerjs';
 
-require("../../node_modules/alertifyjs/build/css/alertify.min.css");
-require("../../node_modules/pickerjs/dist/picker.min.css");
+require("alertifyjs/build/css/alertify.min.css");
+require("pickerjs/dist/picker.min.css");
 
 export default class TcEmailNotifier {
 
@@ -93,7 +93,6 @@ export default class TcEmailNotifier {
         let im;
         switch (field.name) {
             case 'email':
-                debugger;
                 im = new InputmaskRegex({
                     mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
                     greedy: false,
@@ -116,12 +115,25 @@ export default class TcEmailNotifier {
                 break;
             case 'time':
                 new Picker(fieldElement, {
-                    format: 'HH:mm'
+                    format: 'HH:mm',
+                    language: 'ru',
+                    text: {
+                        title: 'Выберите время',
+                        cancel: 'Отмена',
+                        confirm: 'Выбор'
+                    }
+
                 });
                 break;
             case 'date':
                 new Picker(fieldElement, {
-                    format: 'MM/DD/YYYY'
+                    format: 'MM/DD/YYYY',
+                    language: 'ru',
+                    text: {
+                        title: 'Выберите дату',
+                        cancel: 'Отмена',
+                        confirm: 'Выбор'
+                    }
                 });
                 break;
         }

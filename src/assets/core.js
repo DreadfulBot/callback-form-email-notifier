@@ -4,8 +4,8 @@ import Moment from 'moment';
 import jstz from 'jstimezonedetect';
 import Picker from 'pickerjs';
 
-require("../../node_modules/alertifyjs/build/css/alertify.min.css");
-require("../../node_modules/pickerjs/dist/picker.min.css");
+require("alertifyjs/build/css/alertify.min.css");
+require("pickerjs/dist/picker.min.css");
 
 export default class TcEmailNotifier {
 
@@ -89,11 +89,10 @@ export default class TcEmailNotifier {
         if(field.onFocus) fieldElement.onfocus = field.onFocus;
     }
 
-    formatField(field, fieldElement) {
+    static formatField(field, fieldElement) {
         let im;
-        switch (field.name) {
+        switch (field.role) {
             case 'email':
-                debugger;
                 im = new InputmaskRegex({
                     mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
                     greedy: false,
@@ -116,13 +115,31 @@ export default class TcEmailNotifier {
                 break;
             case 'time':
                 new Picker(fieldElement, {
-                    format: 'HH:mm'
+                    format: 'HH:mm',
+                    language: 'ru',
+                    text: {
+                        title: 'Выберите время',
+                        cancel: 'Отмена',
+                        confirm: 'Выбор'
+                    }
+
                 });
                 break;
             case 'date':
                 new Picker(fieldElement, {
-                    format: 'MM/DD/YYYY'
+                    format: 'MM/DD/YYYY',
+                    language: 'ru',
+                    text: {
+                        title: 'Выберите дату',
+                        cancel: 'Отмена',
+                        confirm: 'Выбор'
+                    }
                 });
+                break;
+            case 'submit':
+                fieldElement.value = "Отправить";
+                break;
+            default:
                 break;
         }
     }
@@ -243,10 +260,12 @@ export default class TcEmailNotifier {
             /* adding it to area */
             let elementArea = document.createElement('div');
             elementArea.setAttribute('id', field.id);
-            elementArea.appendChild(fieldElement);
+
 
             if(field.titleTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.titleTag));
             if(field.errorTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.errorTag));
+
+            elementArea.appendChild(fieldElement);
 
             /* grouping by areas */
             if(field.parentClass) {
@@ -263,7 +282,7 @@ export default class TcEmailNotifier {
                 formElement.appendChild(elementArea);
             }
 
-            this.formatField(field, fieldElement);
+            TcEmailNotifier.formatField(field, fieldElement);
             TcEmailNotifier.addFieldEventListener(field, fieldElement);
         });
 

@@ -33,7 +33,7 @@ module.exports = {
 	context: path.resolve(__dirname),
 
 	entry: {
-		index: path.resolve(path.join(paths.srcRoot, '/assets/core.js'))
+		index: path.resolve(path.join(paths.srcRoot, '/index.js'))
 	},
 
 	output: {
