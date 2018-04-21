@@ -44,7 +44,7 @@ export default class TcEmailNotifier {
 
     addFormBackendUrl() {
         let formElement = document.querySelector(`#${this.options.formId}`);
-        formElement.setAttribute('action', '#');
+        formElement.setAttribute('action', '/index.php');
         formElement.setAttribute('method', 'post');
     }
 
@@ -233,6 +233,53 @@ export default class TcEmailNotifier {
         formElement.appendChild(button);
     }
 
+    createSingleField(formElement, field) {
+        if(this.d) {
+            console.log('[x] adding field ');
+            this.printObject(field);
+        }
+
+        /* forming field element */
+        let fieldElement = document.createElement('input');
+        fieldElement.setAttribute('id', field.id);
+        fieldElement.setAttribute('type', field.type);
+        fieldElement.setAttribute('name', field.name);
+
+        if(field.placeholder) fieldElement.setAttribute('placeholder', field.placeholder);
+        if(field.cssClass) fieldElement.setAttribute('class', field.cssClass);
+        if(field.required) fieldElement.required = true;
+        if(field.value) fieldElement.value = field.value;
+
+        /* adding it to area */
+        let elementArea = document.createElement('div');
+        elementArea.setAttribute('id', field.id);
+
+
+        if(field.titleTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.titleTag));
+
+        elementArea.appendChild(fieldElement);
+
+        if(field.errorTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.errorTag));
+
+        /* grouping by areas */
+        if(field.parentClass) {
+            let block = formElement.querySelector(`.${field.parentClass}`);
+
+            if(!block) {
+                block = document.createElement('div');
+                block.classList.add(field.parentClass);
+                formElement.appendChild(block);
+            }
+
+            block.appendChild(elementArea);
+        } else {
+            formElement.appendChild(elementArea);
+        }
+
+        TcEmailNotifier.formatField(field, fieldElement);
+        TcEmailNotifier.addFieldEventListener(field, fieldElement);
+    }
+
     createFields() {
         if(this.d) {
             console.log('createFields');
@@ -240,56 +287,19 @@ export default class TcEmailNotifier {
 
         let formElement = document.querySelector(`#${this.options.formId}`);
 
-        this.fields.forEach((field) => {
-            if(this.d) {
-                console.log('[x] adding field ');
-                this.printObject(field);
-            }
+        let regularFields = this.fields.filter(element => element.type !== 'submit');
+        let controlFields = this.fields.filter(element => element.type === 'submit');
 
-            /* forming field element */
-            let fieldElement = document.createElement('input');
-            fieldElement.setAttribute('id', field.id);
-            fieldElement.setAttribute('type', field.type);
-            fieldElement.setAttribute('name', field.name);
-
-            if(field.placeholder) fieldElement.setAttribute('placeholder', field.placeholder);
-            if(field.cssClass) fieldElement.setAttribute('class', field.cssClass);
-            if(field.required) fieldElement.required = true;
-            if(field.value) fieldElement.value = field.value;
-
-            /* adding it to area */
-            let elementArea = document.createElement('div');
-            elementArea.setAttribute('id', field.id);
-
-
-            if(field.titleTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.titleTag));
-            if(field.errorTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.errorTag));
-
-            elementArea.appendChild(fieldElement);
-
-            /* grouping by areas */
-            if(field.parentClass) {
-                let block = formElement.querySelector(`.${field.parentClass}`);
-
-                if(!block) {
-                    block = document.createElement('div');
-                    block.classList.add(field.parentClass);
-                    formElement.appendChild(block);
-                }
-
-                block.appendChild(elementArea);
-            } else {
-                formElement.appendChild(elementArea);
-            }
-
-            TcEmailNotifier.formatField(field, fieldElement);
-            TcEmailNotifier.addFieldEventListener(field, fieldElement);
+        regularFields.forEach((field) => {
+            this.createSingleField(formElement, field);
         });
 
         if(this.options.addHiddenFields) this.addHiddenFields(formElement);
         if(this.options.addGeolocation) this.addGeolocation(formElement);
         if(this.options.addRecaptchaButton) this.addRecaptchaButton(formElement);
+
+        controlFields.forEach((field) => {
+            this.createSingleField(formElement, field);
+        });
     }
-
-
 }

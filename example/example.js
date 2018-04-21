@@ -50,13 +50,20 @@ function initCallbackForm() {
             id: 'submit',
             type: 'submit',
             role: 'submit'
+        },{
+            titleTag: '<p class="is-checked">С <a href="#">условиями обработки персональных</a> данных согласен:</p>',
+            name: 'is-checked',
+            id: 'is-checked',
+            type: 'checkbox',
+            role: 'checkbox',
+            required: true,
         }
     ];
 
     let options = {
         formId: 'callback',
         backendUrl: 'tc-email-notifier.php',
-        isDebugMode: true,
+        isDebugMode: false,
         addHiddenFields: true,
         addGeolocation: true,
         addRecaptchaButton: true,
@@ -69,7 +76,3 @@ function initCallbackForm() {
 }
 
 export {initCallbackForm};
-
-
-
-
