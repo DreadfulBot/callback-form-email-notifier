@@ -228,7 +228,7 @@ export default class TcEmailNotifier {
 
         let button = document.createElement('div');
         button.classList.add('g-recaptcha');
-        button.setAttribute('data-sitekey', this.options.googleMapsApiKey);
+        button.setAttribute('data-sitekey', this.options.googleReCaptchaApiKey);
 
         formElement.appendChild(button);
     }
