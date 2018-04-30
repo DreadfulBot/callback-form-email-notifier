@@ -34,12 +34,10 @@ function getLocalIpAddress() {
 	return localIpAddress;
 }
 
-module.exports = {
-	/* user defined functions */
-	isDev: isDev(),
-	localIpAddress: getLocalIpAddress(),
+let udf = {};
+udf.localIpAddress =  getLocalIpAddress();
+udf.isDev = isDev();
+udf.nodePath = path.resolve(__dirname, './node_modules');
+udf.NODE_ENV = getNodeEnv();
 
-	/* aliases */
-	nodePath: path.resolve(__dirname, './node_modules'),
-	NODE_ENV: getNodeEnv(),
-};
+export default udf;

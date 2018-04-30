@@ -211,14 +211,14 @@ export default class TcEmailNotifier {
             formElement.appendChild(fieldElement);
         });
 
-        if(this.d)
-            console.log(geoFields[0])
+        console.log(geoFields[0])
     }
 
     static htmlToElement(html) {
-        let div = document.createElement('div');
-        div.innerHTML = html.trim();
-        return div.firstChild;
+        let template = document.createElement('template');
+        html = html.trim();
+        template.innerHTML = html;
+        return template.content.firstChild;
     }
 
     addRecaptchaButton(formElement) {
@@ -239,7 +239,7 @@ export default class TcEmailNotifier {
             this.printObject(field);
         }
 
-		/* forming field element */
+        /* forming field element */
         let fieldElement = document.createElement('input');
         fieldElement.setAttribute('id', field.id);
         fieldElement.setAttribute('type', field.type);
@@ -250,7 +250,7 @@ export default class TcEmailNotifier {
         if(field.required) fieldElement.required = true;
         if(field.value) fieldElement.value = field.value;
 
-		/* adding it to area */
+        /* adding it to area */
         let elementArea = document.createElement('div');
         elementArea.setAttribute('id', field.id);
 
@@ -261,7 +261,7 @@ export default class TcEmailNotifier {
 
         if(field.errorTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.errorTag));
 
-		/* grouping by areas */
+        /* grouping by areas */
         if(field.parentClass) {
             let block = formElement.querySelector(`.${field.parentClass}`);
 

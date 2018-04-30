@@ -1,5 +1,5 @@
-import TcEmailNotifier from '../../app/components/php.email-notifier/dist/tc-email-notifier';
-import alertify from '../../node_modules/alertifyjs/build/alertify';
+import TcEmailNotifier from '../dist/tc-email-notifier';
+import alertify from '../node_modules/alertifyjs/build/alertify';
 
 function initCallbackForm() {
 	alertify.defaults.glossary.title = 'Уведомление';
