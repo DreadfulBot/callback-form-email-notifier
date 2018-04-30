@@ -1,8 +1,8 @@
 {
   "name": "callback-form-email-notifier",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "callback-form-email-notifier",
-  "main": "webpack.config.js",
+  "main": "webpack.config.dist.babel.js",
   "dependencies": {
     "bootstrap": "^3.3",
     "inputmask": "^3.3.11",
@@ -47,7 +47,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DreadfulBot/fullstack.callback-form-email-notifier.git"
+    "url": "git+https://github.com/DreadfulBot/php.email-notifier"
   },
   "keywords": [
     "callback",
@@ -58,7 +58,7 @@
   "author": "Krivoshchekov Artem",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DreadfulBot/fullstack.callback-form-email-notifier/issues"
+    "url": "https://github.com/DreadfulBot/php.email-notifier/issues"
   },
-  "homepage": "https://github.com/DreadfulBot/fullstack.callback-form-email-notifier#readme"
+  "homepage": "https://github.com/DreadfulBot/php.email-notifier#readme"
 }
