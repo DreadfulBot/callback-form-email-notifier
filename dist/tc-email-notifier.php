@@ -8,170 +8,74 @@
 
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/email/recaptchalib.php';
+
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
 
+require __DIR__ . '/email/autoload.php';
+
 // MAIN //
-$base_path = 'email/';
-$params = $_POST;
-
-function isCaptchaValid($token, $accessKey) {
-    // ваш секретный ключ
-    $secret = $accessKey;
-
-    // пустой ответ
-    $response = null;
-
-    // проверка секретного ключа
-    $reCaptcha = new ReCaptcha($secret);
-
-    if ($token) {
-        $response = $reCaptcha->verifyResponse(
-            $_SERVER["REMOTE_ADDR"],
-            $_POST["g-recaptcha-response"]
-        );
-        if ($response != null && $response->success) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
-}
-
-function answerJson($data, $status) {
-    header('Content-type: application/json; charset=utf-8');
-    echo json_encode(array("status" => $status, "error" => $data), JSON_UNESCAPED_UNICODE);
-}
-
-function getMovedUploadFileUrl($uploadDir, $site) {
-    if (!isset($_FILES) || !isset($_FILES['file']))
-        return null;
-
-    if($_FILES['file']['error'] == '2') {
-        throw new Exception("Файл слишком большой");
-    }
-
-    $currentDate = date('d-m-Y-H-i-s');
-
-    $pathParts = pathinfo(basename($_FILES['file']['name']));
-
-    $newFileName = trim($pathParts['filename']) .
-        '_' . $currentDate .
-        '.' . $pathParts['extension'];
-    $uploadFile = $uploadDir . '/' . $newFileName;
-
-    if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
-        throw new Exception("Не удалось загрузить файл");
-    }
-
-    $url = sprintf("%s/%s/%s", $site, "uploads", $newFileName);
-    return $url;
-}
+$basePath = 'email/';
+$settingsFileName = 'settings.ini';
 
 try {
-    // load settings
-    if(!file_exists($base_path . 'settings.ini')) {
-        throw new Exception('Не удалось загрузить файл настроек');
+
+    $settingsWorker = new SettingsWorker();
+    $fileWorker = new FileWorker();
+    $emailMessageTemplateWorker = new EmailMessageTemplateWorker($settingsWorker, $fileWorker);
+    $settingsWorker->loadSettings($basePath . $settingsFileName);
+
+    try {
+        $googleCaptchaValidator = new GoogleCaptchaWorker(
+            ParametersWorker::get('g-recaptcha-response'),
+            $settingsWorker->getOption('system', 'googleAccessKey')
+        );
+
+        if(!$googleCaptchaValidator->checkIsCaptchaValid())
+            throw new Exception("Подтвердите, что вы не робот");
+    } catch (SkipStepException $e) {
+        // skipping google captcha checking
+    } catch (EmptyParameterException $e) {
+
     }
 
-    $ini_array = parse_ini_file($base_path . "settings.ini", true);
 
-//    if(isset($params['g-recaptcha-response'])) {
-//        if(!isCaptchaValid($params['g-recaptcha-response'], $ini_array['system']['googleAccessKey'])) {
-//            throw new Exception("Подтвердите, что вы не робот");
-//        }
-//    }
+    $mode = ParametersWorker::get('mode');
+    $messageTemplate = $settingsWorker->getOption('template', $mode);
 
-    // detect mode
-    if(!isset($params['mode'])) {
-        throw new Exception('Не удалось определить тип запроса');
-    }
+    $emailMessageTemplateWorker->loadMessageTemplateFile($basePath . $messageTemplate);
+    $emailMessageTemplateWorker->bindRequiredParams();
+    $emailMessageTemplateWorker->bindOptionalParams();
 
-    $mode = $params['mode'];
+    $fileName = $this->fileWorker->getMovedUploadFileUrl(
+        $this->settingsWorker->getOption('system', 'uploadDir'),
+        $this->settingsWorker->getOption('system', 'site')
+    );
 
-    // detect template
-    if(!isset($ini_array['template'][$mode])) {
-        throw new Exception('Не удалось определить шаблон сообщения');
-    }
-
-    $message_template = $ini_array['template'][$mode];
-
-    if(!file_exists($base_path . $message_template)) {
-        throw new Exception('Не удалось определить шаблон сообщения');
-    }
-
-    $message_template = file_get_contents($base_path . $message_template);
-
-    //detect template params
-    if(!isset($ini_array['template'][$mode.'ParamsRequired'])) {
-        throw new Exception('Не удалось определить обязательные параметры для шаблона сообщения');
-    }
-
-    $required_params = explode(',', $ini_array['template'][$mode.'ParamsRequired']);
-    $optional_params = explode(',', $ini_array['template'][$mode.'ParamsOptional']);
-    $params['site'] = $ini_array['system']['site'];
-
-    // check template params exists
-    foreach ($required_params as $param_name) {
-        if(!isset($params[$param_name])) {
-            throw new Exception($param_name . ' - значение не может быть пустым');
-        }
-    }
-
-    // move upload file
-    // you should get moveduploadfileurl
-    // before params bindings
-    $fileName = getMovedUploadFileUrl($ini_array['system']['uploadDir'], $ini_array['system']['site']);
-    if($fileName) {
-        $params["uploadFileUrl"] = $fileName;
-        $fifo = pathinfo(basename($fileName));
-        $params["uploadFileName"] = $fifo['filename'] . '.' . $fifo['extension'];
-    } else {
-        $params["uploadFileUrl"] = '#';
-    }
-
-    // bind required params in template
-    foreach ($required_params as $param_name) {
-        $message_template =
-            str_replace('{'.$param_name.'}', $params[$param_name], $message_template);
-    }
-
-    // bind optional params in template
-    $key = '';
-    foreach ($optional_params as $param_name) {
-        $key = '{'.$param_name.'}';
-        if(!isset($params[$param_name])) {
-            $message_template =
-                str_replace($key, 'X', $message_template);
-        } else {
-            $message_template =
-                str_replace($key, $params[$param_name], $message_template);
-        }
-    }
+    $emailMessageTemplateWorker->bindFile($fileWorker);
 
     // start message forming
-    $from = $ini_array['sender']['from'];
-    $subject = $ini_array['sender']['title'];
+    $from = $settingsWorker->getOption('sender', 'from');
+    $subject = $settingsWorker->getOption('sender', 'title');
+    $to = $settingsWorker->getOption('receiver', 'to');
 
-    foreach (explode(',', $ini_array['receiver']['to']) as $to) {
+    foreach (explode(',', $to) as $to) {
         try {
             $mail = new Message();
 
             $mail->setFrom($from)
                 ->addTo($to)
                 ->setSubject($subject)
-                ->setHtmlBody($message_template);
+                ->setHtmlBody($messageTemplate);
 
 
             // $mailer = new SendmailMailer;
             // $mailer->send($mail);
 
             $mailer = new Nette\Mail\SmtpMailer(array(
-                'host' => $ini_array['smtp']['host'],
-                'username' => $ini_array['smtp']['user'],
-                'password' => $ini_array['smtp']['password']
+                'host' => $settingsWorker->getOption('smtp', 'host'),
+                'username' => $settingsWorker->getOption('smtp', 'user'),
+                'password' => $settingsWorker->getOption('smtp', 'password')
             ));
 
             $mailer->send($mail);
@@ -180,8 +84,9 @@ try {
         }
     }
 
-    answerJson("Сообщение было успешно отправлено", true);
+    JsonWorker::send("Сообщение было успешно отправлено", true);
+    return;
 } catch (Exception $e) {
-    answerJson($e->getMessage(), false);
+    JsonWorker::send($e->getMessage(), false);
     return;
 }

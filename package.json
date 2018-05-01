@@ -43,11 +43,12 @@
   },
   "scripts": {
     "dev": "set NODE_ENV=development&&webpack-dev-server --open --config webpack.config.example.babel.js",
+    "build:dev": "set NODE_ENV=development&&webpack --config webpack.config.example.babel.js --display verbose --progress --profile --colors",
     "dist": "set NODE_ENV=production&&webpack --config webpack.config.dist.babel.js --display verbose --progress --profile --colors"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DreadfulBot/php.email-notifier"
+    "url": "git+https://github.com/DreadfulBot/callback-form-email-notifier"
   },
   "keywords": [
     "callback",
@@ -58,7 +59,7 @@
   "author": "Krivoshchekov Artem",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DreadfulBot/php.email-notifier/issues"
+    "url": "https://github.com/DreadfulBot/callback-form-email-notifier/issues"
   },
-  "homepage": "https://github.com/DreadfulBot/php.email-notifier#readme"
+  "homepage": "https://github.com/DreadfulBot/callback-form-email-notifier#readme"
 }

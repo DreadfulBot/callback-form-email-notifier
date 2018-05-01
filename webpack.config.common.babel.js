@@ -37,8 +37,10 @@ module.exports = {
         new CopyWebpackPlugin([
             {from: path.join(paths.src, '/email'), to: './email'},
             {from: path.join('./vendor'), to: './vendor'},
-            {from: path.join(paths.src, '/backend/core.php'), to: './tc-email-notifier.php'},
             {from: path.join(paths.src, '/assets/core.js'), to: './tc-email-notifier.js'},
+
+            {from: path.join(paths.src, '/backend/email'), to: './email'},
+			{from: path.join(paths.src, '/backend/core.php'), to: './tc-email-notifier.php'},
         ]),
         new webpack.LoaderOptionsPlugin({
             options: {

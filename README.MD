@@ -1,4 +1,4 @@
-**PHP EMAIL NOTIFICATION PLUGIN**
+**callback-form-email-notifier**
 
 BASED ON
 * "nette/mail": "2.4.3",
