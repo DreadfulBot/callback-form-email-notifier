@@ -28,7 +28,7 @@ try {
     try {
         $googleCaptchaValidator = new GoogleCaptchaWorker(
             ParametersWorker::get('g-recaptcha-response'),
-            $settingsWorker->getOption('system', 'googleAccessKey')
+            $settingsWorker->getOption('system', 'googleReCaptchaApiKey')
         );
 
         if(!$googleCaptchaValidator->checkIsCaptchaValid())
