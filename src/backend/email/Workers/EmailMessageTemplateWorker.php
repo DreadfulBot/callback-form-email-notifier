@@ -20,8 +20,9 @@ class EmailMessageTemplateWorker {
     }
 
     protected function bindParameter($paramName, $paramValue) {
-        $this->messageTemplate =
-            str_replace('{'.$paramName.'}', $paramValue, $this->messageTemplate);
+        $converted = str_replace('{'.$paramName.'}', $paramValue, $this->messageTemplate);
+        $this->messageTemplate = $converted;
+
     }
 
     public function bindRequiredParams() {

@@ -11,7 +11,7 @@ class GoogleCaptchaWorker {
     }
 
     public function checkIsCaptchaValid() {
-        if(is_null($_SERVER["REMOTE_ADDR"]) || is_null($_POST["g-recaptcha-response"]))
+        if(!isset($_SERVER["REMOTE_ADDR"]) || !isset($_POST["g-recaptcha-response"]))
             throw new SkipStepException('remote address or g-recaptcha-response parameter is not allowed');
 
         $reCaptcha = new ReCaptcha($this->accessKey);
