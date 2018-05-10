@@ -1,6 +1,6 @@
 {
   "name": "callback-form-email-notifier",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "callback-form-email-notifier",
   "main": "webpack.config.dist.babel.js",
   "dependencies": {
