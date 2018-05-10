@@ -47,12 +47,12 @@ try {
     $emailMessageTemplateWorker->bindRequiredParams();
     $emailMessageTemplateWorker->bindOptionalParams();
 
-    $fileName = $this->fileWorker->getMovedUploadFileUrl(
-        $this->settingsWorker->getOption('system', 'uploadDir'),
-        $this->settingsWorker->getOption('system', 'site')
+    $fileName = $fileWorker->getMovedUploadFileUrl(
+        $settingsWorker->getOption('system', 'uploadDir'),
+        $settingsWorker->getOption('system', 'site')
     );
 
-    $emailMessageTemplateWorker->bindFile($fileWorker);
+    $emailMessageTemplateWorker->bindFile($fileName);
 
     // start message forming
     $from = $settingsWorker->getOption('sender', 'from');

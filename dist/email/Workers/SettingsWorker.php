@@ -12,7 +12,7 @@ class SettingsWorker {
     }
 
     public function getOption($section, $name) {
-        if(is_null($this->settings[$section][$name])) {
+        if(!isset($this->settings[$section][$name])) {
             throw new Exception(ErrorMessage::getMessage($section));
         }
 

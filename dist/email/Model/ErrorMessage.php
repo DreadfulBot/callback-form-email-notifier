@@ -11,7 +11,7 @@ class ErrorMessage {
     ];
 
     public static function getMessage($name) {
-        if(is_null(self::messages[$name])) {
+        if(!isset(self::messages[$name])) {
             return 'undefined error';
         }
 
