@@ -11,6 +11,10 @@ class EmailMessageTemplateWorker {
 
     }
 
+    public function getMessageTemplate() {
+        return $this->messageTemplate;
+    }
+
     public function loadMessageTemplateFile($path) {
         if(!file_exists($path)) {
             throw new Exception(ErrorMessage::getMessage('template'));
@@ -20,9 +24,8 @@ class EmailMessageTemplateWorker {
     }
 
     protected function bindParameter($paramName, $paramValue) {
-        $converted = str_replace('{'.$paramName.'}', $paramValue, $this->messageTemplate);
-        $this->messageTemplate = $converted;
-
+        $this->messageTemplate =
+            str_replace('{'.$paramName.'}', $paramValue, $this->messageTemplate);
     }
 
     public function bindRequiredParams() {

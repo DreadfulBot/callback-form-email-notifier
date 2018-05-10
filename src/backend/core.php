@@ -66,7 +66,7 @@ try {
             $mail->setFrom($from)
                 ->addTo($to)
                 ->setSubject($subject)
-                ->setHtmlBody($messageTemplate);
+                ->setHtmlBody($emailMessageTemplateWorker->getMessageTemplate());
 
 
             // $mailer = new SendmailMailer;

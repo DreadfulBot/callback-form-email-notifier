@@ -44,7 +44,8 @@
   "scripts": {
     "dev": "set NODE_ENV=development&&webpack-dev-server --open --config webpack.config.example.babel.js",
     "build:dev": "set NODE_ENV=development&&webpack --config webpack.config.example.babel.js --display verbose --progress --profile --colors",
-    "dist": "set NODE_ENV=production&&webpack --config webpack.config.dist.babel.js --display verbose --progress --profile --colors"
+    "dist": "set NODE_ENV=production&&webpack --config webpack.config.dist.babel.js --display verbose --progress --profile --colors",
+    "f": "yarn dist&&py -3 git/git-add.py&&npm version patch&&npm publish"
   },
   "repository": {
     "type": "git",
