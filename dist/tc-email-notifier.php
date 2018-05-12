@@ -39,7 +39,6 @@ try {
 
     }
 
-
     $mode = ParametersWorker::get('mode');
     $messageTemplate = $settingsWorker->getOption('template', $mode);
 
