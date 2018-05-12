@@ -18283,6 +18283,8 @@ var TcEmailNotifier = function () {
 			var request = function request(obj) {
 				return new Promise(function (resolve, reject) {
 					var xhr = new XMLHttpRequest();
+					xhr.responseType = 'json';
+					xhr.overrideMimeType("application/json");
 					xhr.open("POST", _this3.options.backendUrl);
 					if (obj.headers) {
 						Object.keys(obj.headers).forEach(function (key) {
