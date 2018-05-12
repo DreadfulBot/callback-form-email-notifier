@@ -18185,7 +18185,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
@@ -18220,328 +18220,328 @@ __webpack_require__(138);
 __webpack_require__(139);
 
 var TcEmailNotifier = function () {
-    _createClass(TcEmailNotifier, [{
-        key: 'printObject',
-        value: function printObject(object) {
-            var _this = this;
+	_createClass(TcEmailNotifier, [{
+		key: 'printObject',
+		value: function printObject(object) {
+			var _this = this;
 
-            Object.entries(object).forEach(function (_ref) {
-                var _ref2 = _slicedToArray(_ref, 2),
-                    k = _ref2[0],
-                    v = _ref2[1];
+			Object.entries(object).forEach(function (_ref) {
+				var _ref2 = _slicedToArray(_ref, 2),
+				    k = _ref2[0],
+				    v = _ref2[1];
 
-                if (v instanceof Object) {
-                    _this.printObject(v);
-                } else {
-                    console.log(k + ' - ' + v);
-                }
-            });
-        }
-    }]);
+				if (v instanceof Object) {
+					_this.printObject(v);
+				} else {
+					console.log(k + ' - ' + v);
+				}
+			});
+		}
+	}]);
 
-    function TcEmailNotifier(options, fields) {
-        var _this2 = this;
+	function TcEmailNotifier(options, fields) {
+		var _this2 = this;
 
-        _classCallCheck(this, TcEmailNotifier);
+		_classCallCheck(this, TcEmailNotifier);
 
-        _moment2.default.locale('ru');
-        this.options = options;
-        this.fields = fields;
-        this.d = this.options.isDebugMode ? this.options.isDebugMode : false;
+		_moment2.default.locale('ru');
+		this.options = options;
+		this.fields = fields;
+		this.d = this.options.isDebugMode ? this.options.isDebugMode : false;
 
-        if (this.d) {
-            console.log('[x] options are: ');
-            this.printObject(this.options);
-        }
+		if (this.d) {
+			console.log('[x] options are: ');
+			this.printObject(this.options);
+		}
 
-        if (this.d) {
-            console.log('[x] fields are: ');
-            this.fields.forEach(function (field) {
-                _this2.printObject(field);
-            });
-        }
+		if (this.d) {
+			console.log('[x] fields are: ');
+			this.fields.forEach(function (field) {
+				_this2.printObject(field);
+			});
+		}
 
-        this.createFields();
-        this.addFormBackendUrl();
-        this.addSubmitEventListener();
-    }
+		this.createFields();
+		this.addFormBackendUrl();
+		this.addSubmitEventListener();
+	}
 
-    _createClass(TcEmailNotifier, [{
-        key: 'addFormBackendUrl',
-        value: function addFormBackendUrl() {
-            var formElement = document.querySelector('#' + this.options.formId);
-            formElement.setAttribute('action', '/index.php');
-            formElement.setAttribute('method', 'post');
-        }
-    }, {
-        key: 'addSubmitEventListener',
-        value: function addSubmitEventListener() {
-            var _this3 = this;
+	_createClass(TcEmailNotifier, [{
+		key: 'addFormBackendUrl',
+		value: function addFormBackendUrl() {
+			var formElement = document.querySelector('#' + this.options.formId);
+			formElement.setAttribute('action', '/index.php');
+			formElement.setAttribute('method', 'post');
+		}
+	}, {
+		key: 'addSubmitEventListener',
+		value: function addSubmitEventListener() {
+			var _this3 = this;
 
-            var formElement = document.querySelector('#' + this.options.formId);
+			var formElement = document.querySelector('#' + this.options.formId);
 
-            var request = function request(obj) {
-                return new Promise(function (resolve, reject) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", _this3.options.backendUrl);
-                    if (obj.headers) {
-                        Object.keys(obj.headers).forEach(function (key) {
-                            xhr.setRequestHeader(key, obj.headers[key]);
-                        });
-                    }
-                    xhr.onload = function () {
-                        if (xhr.status >= 200 && xhr.status < 300) {
-                            resolve(xhr.response);
-                        } else {
-                            reject(xhr.statusText);
-                        }
-                    };
-                    xhr.onerror = function () {
-                        return reject(xhr.statusText);
-                    };
-                    xhr.send(obj.body);
-                });
-            };
+			var request = function request(obj) {
+				return new Promise(function (resolve, reject) {
+					var xhr = new XMLHttpRequest();
+					xhr.open("POST", _this3.options.backendUrl);
+					if (obj.headers) {
+						Object.keys(obj.headers).forEach(function (key) {
+							xhr.setRequestHeader(key, obj.headers[key]);
+						});
+					}
+					xhr.onload = function () {
+						if (xhr.status >= 200 && xhr.status < 300) {
+							resolve(xhr.response);
+						} else {
+							reject(xhr.response);
+						}
+					};
+					xhr.onerror = function () {
+						return reject(xhr.response);
+					};
+					xhr.send(obj.body);
+				});
+			};
 
-            formElement.addEventListener('submit', function (e) {
-                e.preventDefault();
-                request({ body: new FormData(e.target) }).then(function (answer) {
-                    _this3.options.onSuccess(answer);
-                }).catch(function (error) {
-                    _this3.options.onError(error);
-                });
-            });
-        }
-    }, {
-        key: 'addHiddenFields',
-        value: function addHiddenFields(formElement) {
-            var hiddenFields = [{
-                name: 'useragent',
-                value: navigator.userAgent
-            }, {
-                name: 'referrer',
-                value: document.referrer
-            }, {
-                name: 'timezone',
-                value: new _jstimezonedetect2.default.determine().name()
-            }, {
-                name: 'localtime',
-                value: new _moment2.default().format()
-            }, {
-                name: 'cookies',
-                value: document.cookie
-            }];
+			formElement.addEventListener('submit', function (e) {
+				e.preventDefault();
+				request({ body: new FormData(e.target) }).then(function (answer) {
+					_this3.options.onSuccess(answer);
+				}).catch(function (error) {
+					_this3.options.onError(error);
+				});
+			});
+		}
+	}, {
+		key: 'addHiddenFields',
+		value: function addHiddenFields(formElement) {
+			var hiddenFields = [{
+				name: 'useragent',
+				value: navigator.userAgent
+			}, {
+				name: 'referrer',
+				value: document.referrer
+			}, {
+				name: 'timezone',
+				value: new _jstimezonedetect2.default.determine().name()
+			}, {
+				name: 'localtime',
+				value: new _moment2.default().format()
+			}, {
+				name: 'cookies',
+				value: document.cookie
+			}];
 
-            hiddenFields.forEach(function (field) {
-                var fieldElement = TcEmailNotifier.createHiddenField();
-                fieldElement.setAttribute('id', field.name);
-                fieldElement.setAttribute('name', field.name);
-                fieldElement.setAttribute('value', field.value);
-                formElement.appendChild(fieldElement);
-            });
-        }
-    }, {
-        key: 'addGeolocation',
-        value: function addGeolocation(formElement) {
-            var _this4 = this;
+			hiddenFields.forEach(function (field) {
+				var fieldElement = TcEmailNotifier.createHiddenField();
+				fieldElement.setAttribute('id', field.name);
+				fieldElement.setAttribute('name', field.name);
+				fieldElement.setAttribute('value', field.value);
+				formElement.appendChild(fieldElement);
+			});
+		}
+	}, {
+		key: 'addGeolocation',
+		value: function addGeolocation(formElement) {
+			var _this4 = this;
 
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    _this4.addGeolocationCallBack(position, formElement);
-                });
-            }
-        }
-    }, {
-        key: 'addGeolocationCallBack',
-        value: function addGeolocationCallBack(position, formElement) {
-            var geoFields = [{
-                name: 'geocoords',
-                value: 'lat:' + position.coords.latitude + ';long:' + position.coords.longitude
-            }, {
-                name: 'geomap',
-                value: 'https://maps.googleapis.com/maps/api/staticmap?center=' + (position.coords.latitude + "," + position.coords.longitude) + '&zoom=14&size=400x300&sensor=false&key=' + this.options.googleMapsApiKey
-            }];
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function (position) {
+					_this4.addGeolocationCallBack(position, formElement);
+				});
+			}
+		}
+	}, {
+		key: 'addGeolocationCallBack',
+		value: function addGeolocationCallBack(position, formElement) {
+			var geoFields = [{
+				name: 'geocoords',
+				value: 'lat:' + position.coords.latitude + ';long:' + position.coords.longitude
+			}, {
+				name: 'geomap',
+				value: 'https://maps.googleapis.com/maps/api/staticmap?center=' + (position.coords.latitude + "," + position.coords.longitude) + '&zoom=14&size=400x300&sensor=false&key=' + this.options.googleMapsApiKey
+			}];
 
-            geoFields.forEach(function (field) {
-                var fieldElement = TcEmailNotifier.createHiddenField();
-                fieldElement.setAttribute('id', field.name);
-                fieldElement.setAttribute('name', field.name);
-                fieldElement.setAttribute('value', field.value);
-                formElement.appendChild(fieldElement);
-            });
+			geoFields.forEach(function (field) {
+				var fieldElement = TcEmailNotifier.createHiddenField();
+				fieldElement.setAttribute('id', field.name);
+				fieldElement.setAttribute('name', field.name);
+				fieldElement.setAttribute('value', field.value);
+				formElement.appendChild(fieldElement);
+			});
 
-            console.log(geoFields[0]);
-        }
-    }, {
-        key: 'addRecaptchaButton',
-        value: function addRecaptchaButton(formElement) {
-            var script = document.createElement('script');
-            script.src = 'https://www.google.com/recaptcha/api.js';
-            document.body.appendChild(script);
+			console.log(geoFields[0]);
+		}
+	}, {
+		key: 'addRecaptchaButton',
+		value: function addRecaptchaButton(formElement) {
+			var script = document.createElement('script');
+			script.src = 'https://www.google.com/recaptcha/api.js';
+			document.body.appendChild(script);
 
-            var button = document.createElement('div');
-            button.classList.add('g-recaptcha');
-            button.setAttribute('data-sitekey', this.options.googleReCaptchaApiKey);
+			var button = document.createElement('div');
+			button.classList.add('g-recaptcha');
+			button.setAttribute('data-sitekey', this.options.googleReCaptchaApiKey);
 
-            formElement.appendChild(button);
-        }
-    }, {
-        key: 'createSingleField',
-        value: function createSingleField(formElement, field) {
-            if (this.d) {
-                console.log('[x] adding field ');
-                this.printObject(field);
-            }
+			formElement.appendChild(button);
+		}
+	}, {
+		key: 'createSingleField',
+		value: function createSingleField(formElement, field) {
+			if (this.d) {
+				console.log('[x] adding field ');
+				this.printObject(field);
+			}
 
-            /* forming field element */
-            var fieldElement = document.createElement('input');
-            fieldElement.setAttribute('id', field.id);
-            fieldElement.setAttribute('type', field.type);
-            fieldElement.setAttribute('name', field.name);
+			/* forming field element */
+			var fieldElement = document.createElement('input');
+			fieldElement.setAttribute('id', field.id);
+			fieldElement.setAttribute('type', field.type);
+			fieldElement.setAttribute('name', field.name);
 
-            if (field.placeholder) fieldElement.setAttribute('placeholder', field.placeholder);
-            if (field.cssClass) fieldElement.setAttribute('class', field.cssClass);
-            if (field.required) fieldElement.required = true;
-            if (field.value) fieldElement.value = field.value;
+			if (field.placeholder) fieldElement.setAttribute('placeholder', field.placeholder);
+			if (field.cssClass) fieldElement.setAttribute('class', field.cssClass);
+			if (field.required) fieldElement.required = true;
+			if (field.value) fieldElement.value = field.value;
 
-            /* adding it to area */
-            var elementArea = document.createElement('div');
-            elementArea.setAttribute('id', field.id);
+			/* adding it to area */
+			var elementArea = document.createElement('div');
+			elementArea.setAttribute('id', field.id);
 
-            if (field.titleTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.titleTag));
+			if (field.titleTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.titleTag));
 
-            elementArea.appendChild(fieldElement);
+			elementArea.appendChild(fieldElement);
 
-            if (field.errorTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.errorTag));
+			if (field.errorTag) elementArea.appendChild(TcEmailNotifier.htmlToElement(field.errorTag));
 
-            /* grouping by areas */
-            if (field.parentClass) {
-                var block = formElement.querySelector('.' + field.parentClass);
+			/* grouping by areas */
+			if (field.parentClass) {
+				var block = formElement.querySelector('.' + field.parentClass);
 
-                if (!block) {
-                    block = document.createElement('div');
-                    block.classList.add(field.parentClass);
-                    formElement.appendChild(block);
-                }
+				if (!block) {
+					block = document.createElement('div');
+					block.classList.add(field.parentClass);
+					formElement.appendChild(block);
+				}
 
-                block.appendChild(elementArea);
-            } else {
-                formElement.appendChild(elementArea);
-            }
+				block.appendChild(elementArea);
+			} else {
+				formElement.appendChild(elementArea);
+			}
 
-            TcEmailNotifier.formatField(field, fieldElement);
-            TcEmailNotifier.addFieldEventListener(field, fieldElement);
-        }
-    }, {
-        key: 'createFields',
-        value: function createFields() {
-            var _this5 = this;
+			TcEmailNotifier.formatField(field, fieldElement);
+			TcEmailNotifier.addFieldEventListener(field, fieldElement);
+		}
+	}, {
+		key: 'createFields',
+		value: function createFields() {
+			var _this5 = this;
 
-            if (this.d) {
-                console.log('createFields');
-            }
+			if (this.d) {
+				console.log('createFields');
+			}
 
-            var formElement = document.querySelector('#' + this.options.formId);
+			var formElement = document.querySelector('#' + this.options.formId);
 
-            var regularFields = this.fields.filter(function (element) {
-                return element.type !== 'submit';
-            });
-            var controlFields = this.fields.filter(function (element) {
-                return element.type === 'submit';
-            });
+			var regularFields = this.fields.filter(function (element) {
+				return element.type !== 'submit';
+			});
+			var controlFields = this.fields.filter(function (element) {
+				return element.type === 'submit';
+			});
 
-            regularFields.forEach(function (field) {
-                _this5.createSingleField(formElement, field);
-            });
+			regularFields.forEach(function (field) {
+				_this5.createSingleField(formElement, field);
+			});
 
-            if (this.options.addHiddenFields) this.addHiddenFields(formElement);
-            if (this.options.addGeolocation) this.addGeolocation(formElement);
-            if (this.options.addRecaptchaButton) this.addRecaptchaButton(formElement);
+			if (this.options.addHiddenFields) this.addHiddenFields(formElement);
+			if (this.options.addGeolocation) this.addGeolocation(formElement);
+			if (this.options.addRecaptchaButton) this.addRecaptchaButton(formElement);
 
-            controlFields.forEach(function (field) {
-                _this5.createSingleField(formElement, field);
-            });
-        }
-    }], [{
-        key: 'addFieldEventListener',
-        value: function addFieldEventListener(field, fieldElement) {
-            if (field.onClick) fieldElement.onclick = field.onClick;
-            if (field.onFocus) fieldElement.onfocus = field.onFocus;
-        }
-    }, {
-        key: 'formatField',
-        value: function formatField(field, fieldElement) {
-            var im = void 0;
-            switch (field.role) {
-                case 'email':
-                    im = new _inputmaskRegex2.default({
-                        mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
-                        greedy: false,
-                        onBeforePaste: function onBeforePaste(pastedValue, opts) {
-                            pastedValue = pastedValue.toLowerCase();
-                            return pastedValue.replace("mailto:", "");
-                        },
-                        definitions: {
-                            '*': {
-                                validator: "[0-9A-Za-zА-Яа-я!#$%&'*+/=?^_`{|}~\-]",
-                                casing: "lower"
-                            }
-                        }
-                    });
-                    im.mask(fieldElement);
-                    break;
-                case 'tel':
-                    im = new _inputmaskPhone2.default('+7 (999) 999-99-99');
-                    im.mask(fieldElement);
-                    break;
-                case 'time':
-                    new _pickerjs2.default(fieldElement, {
-                        format: 'HH:mm',
-                        language: 'ru',
-                        text: {
-                            title: 'Выберите время',
-                            cancel: 'Отмена',
-                            confirm: 'Выбор'
-                        }
+			controlFields.forEach(function (field) {
+				_this5.createSingleField(formElement, field);
+			});
+		}
+	}], [{
+		key: 'addFieldEventListener',
+		value: function addFieldEventListener(field, fieldElement) {
+			if (field.onClick) fieldElement.onclick = field.onClick;
+			if (field.onFocus) fieldElement.onfocus = field.onFocus;
+		}
+	}, {
+		key: 'formatField',
+		value: function formatField(field, fieldElement) {
+			var im = void 0;
+			switch (field.role) {
+				case 'email':
+					im = new _inputmaskRegex2.default({
+						mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+						greedy: false,
+						onBeforePaste: function onBeforePaste(pastedValue, opts) {
+							pastedValue = pastedValue.toLowerCase();
+							return pastedValue.replace("mailto:", "");
+						},
+						definitions: {
+							'*': {
+								validator: "[0-9A-Za-zА-Яа-я!#$%&'*+/=?^_`{|}~\-]",
+								casing: "lower"
+							}
+						}
+					});
+					im.mask(fieldElement);
+					break;
+				case 'tel':
+					im = new _inputmaskPhone2.default('+7 (999) 999-99-99');
+					im.mask(fieldElement);
+					break;
+				case 'time':
+					new _pickerjs2.default(fieldElement, {
+						format: 'HH:mm',
+						language: 'ru',
+						text: {
+							title: 'Выберите время',
+							cancel: 'Отмена',
+							confirm: 'Выбор'
+						}
 
-                    });
-                    break;
-                case 'date':
-                    new _pickerjs2.default(fieldElement, {
-                        format: 'MM/DD/YYYY',
-                        language: 'ru',
-                        text: {
-                            title: 'Выберите дату',
-                            cancel: 'Отмена',
-                            confirm: 'Выбор'
-                        }
-                    });
-                    break;
-                case 'submit':
-                    fieldElement.value = "Отправить";
-                    break;
-                default:
-                    break;
-            }
-        }
-    }, {
-        key: 'createHiddenField',
-        value: function createHiddenField() {
-            var fieldElement = document.createElement('input');
-            fieldElement.setAttribute('type', 'hidden');
-            return fieldElement;
-        }
-    }, {
-        key: 'htmlToElement',
-        value: function htmlToElement(html) {
-            var template = document.createElement('template');
-            html = html.trim();
-            template.innerHTML = html;
-            return template.content.firstChild;
-        }
-    }]);
+					});
+					break;
+				case 'date':
+					new _pickerjs2.default(fieldElement, {
+						format: 'MM/DD/YYYY',
+						language: 'ru',
+						text: {
+							title: 'Выберите дату',
+							cancel: 'Отмена',
+							confirm: 'Выбор'
+						}
+					});
+					break;
+				case 'submit':
+					fieldElement.value = "Отправить";
+					break;
+				default:
+					break;
+			}
+		}
+	}, {
+		key: 'createHiddenField',
+		value: function createHiddenField() {
+			var fieldElement = document.createElement('input');
+			fieldElement.setAttribute('type', 'hidden');
+			return fieldElement;
+		}
+	}, {
+		key: 'htmlToElement',
+		value: function htmlToElement(html) {
+			var template = document.createElement('template');
+			html = html.trim();
+			template.innerHTML = html;
+			return template.content.firstChild;
+		}
+	}]);
 
-    return TcEmailNotifier;
+	return TcEmailNotifier;
 }();
 
 exports.default = TcEmailNotifier;
