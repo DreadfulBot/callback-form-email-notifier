@@ -5,3 +5,4 @@ yarn.lock
 composer.lock
 yarn-error.log
 build/
+npm-debug.log
