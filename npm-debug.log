@@ -1,0 +1,147 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.10
+3 info using node@v6.10.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: 'D:\\Workspaces\\callback-form-email-notifier',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory C:\Users\RiskyWorks\AppData\Roaming\npm-cache\callback-form-email-notifier\1.0.15\package.tgz not in flight; packing
+9 verbose correctMkdir C:\Users\RiskyWorks\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+10 info lifecycle callback-form-email-notifier@1.0.15~prepublish: callback-form-email-notifier@1.0.15
+11 silly lifecycle callback-form-email-notifier@1.0.15~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ 'C:\\Users\\RiskyWorks\\AppData\\Roaming\\npm-cache\\callback-form-email-notifier\\1.0.15\\package.tgz',
+12 verbose tar pack   'D:\\Workspaces\\callback-form-email-notifier' ]
+13 verbose tarball C:\Users\RiskyWorks\AppData\Roaming\npm-cache\callback-form-email-notifier\1.0.15\package.tgz
+14 verbose folder D:\Workspaces\callback-form-email-notifier
+15 verbose addLocalTarball adding from inside cache C:\Users\RiskyWorks\AppData\Roaming\npm-cache\callback-form-email-notifier\1.0.15\package.tgz
+16 verbose correctMkdir C:\Users\RiskyWorks\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+17 silly cache afterAdd callback-form-email-notifier@1.0.15
+18 verbose afterAdd C:\Users\RiskyWorks\AppData\Roaming\npm-cache\callback-form-email-notifier\1.0.15\package\package.json not in flight; writing
+19 verbose correctMkdir C:\Users\RiskyWorks\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+20 verbose afterAdd C:\Users\RiskyWorks\AppData\Roaming\npm-cache\callback-form-email-notifier\1.0.15\package\package.json written
+21 silly publish { name: 'callback-form-email-notifier',
+21 silly publish   version: '1.0.15',
+21 silly publish   description: 'callback-form-email-notifier',
+21 silly publish   main: 'webpack.config.dist.babel.js',
+21 silly publish   dependencies:
+21 silly publish    { bootstrap: '^3.3',
+21 silly publish      inputmask: '^3.3.11',
+21 silly publish      jquery: '^3.3.1',
+21 silly publish      jstimezonedetect: '^1.0.6',
+21 silly publish      moment: '^2.20.1',
+21 silly publish      pickerjs: '^0.2.0',
+21 silly publish      'popper.js': '^1.12.9' },
+21 silly publish   devDependencies:
+21 silly publish    { alertifyjs: '^1.11.1',
+21 silly publish      'babel-core': '^6.26.0',
+21 silly publish      'babel-loader': '^7.1.2',
+21 silly publish      'babel-preset-es2015': '^6.24.1',
+21 silly publish      'babel-register': '^6.26.0',
+21 silly publish      bower: '^1.8.0',
+21 silly publish      'clean-webpack-plugin': '^0.1.18',
+21 silly publish      'copy-webpack-plugin': '^4.3.1',
+21 silly publish      'css-loader': '^0.28.11',
+21 silly publish      'exports-loader': '^0.7.0',
+21 silly publish      'extract-text-webpack-plugin': '^3.0.2',
+21 silly publish      'file-loader': '^1.1.6',
+21 silly publish      'html-webpack-plugin': '^2.30.1',
+21 silly publish      'node-sass': '^4.7.2',
+21 silly publish      poststylus: '^1.0.0',
+21 silly publish      pug: '^2.0.0-rc.4',
+21 silly publish      'pug-html-loader': '^1.1.5',
+21 silly publish      'pug-loader': '^2.3.0',
+21 silly publish      'rucksack-css': '^1.0.2',
+21 silly publish      'sass-loader': '^7.0.1',
+21 silly publish      'style-loader': '^0.21.0',
+21 silly publish      stylus: '^0.54.5',
+21 silly publish      'stylus-loader': '^3.0.2',
+21 silly publish      'uglifyjs-webpack-plugin': '^1.1.8',
+21 silly publish      webpack: '^3.10.0',
+21 silly publish      'webpack-dev-server': '^2.11.1',
+21 silly publish      'webpack-merge': '^4.1.2' },
+21 silly publish   scripts:
+21 silly publish    { dev: 'set NODE_ENV=development&&webpack-dev-server --open --config webpack.config.example.babel.js',
+21 silly publish      'build:dev': 'set NODE_ENV=development&&webpack --config webpack.config.example.babel.js --display verbose --progress --profile --colors',
+21 silly publish      dist: 'set NODE_ENV=production&&webpack --config webpack.config.dist.babel.js --display verbose --progress --profile --colors',
+21 silly publish      f: 'yarn dist&&py -3 git/git-add.py&&npm version patch&&npm publish' },
+21 silly publish   repository:
+21 silly publish    { type: 'git',
+21 silly publish      url: 'git+https://github.com/DreadfulBot/callback-form-email-notifier.git' },
+21 silly publish   keywords: [ 'callback', 'form', 'email', 'notifier' ],
+21 silly publish   author: { name: 'Krivoshchekov Artem' },
+21 silly publish   license: 'ISC',
+21 silly publish   bugs: { url: 'https://github.com/DreadfulBot/callback-form-email-notifier/issues' },
+21 silly publish   homepage: 'https://github.com/DreadfulBot/callback-form-email-notifier#readme',
+21 silly publish   readme: '**callback-form-email-notifier**\r\n\r\nBASED ON\r\n* "nette/mail": "2.4.3",\r\n* "nette/utils": "2.4.7",\r\n* "google/recaptcha": "~1.1"\r\n\r\nWe are in npm now! Simply execute this command to add plugin into your project:\r\n```\r\nnpm install callback-form-email-notifier\r\n```\r\n\r\n**INSTALLATION**\r\n\r\nAt first, don\'t forget:\r\n```\r\nyarn install / nmp install\r\ncomposer install\r\n```\r\n\r\n0. copy *dist/email/settings-example.ini* to *dist/email/settings.ini*\r\n1. set all required values in *dist/email/settings.ini*\r\n2. import  *tc-email-notifier.js* in your js-script where you need\r\n3. modify your webpack/grunt... script to copy *dist/vendor* and *dist/email* folders into your project\r\n\r\n**PATH EXPLANATION**\r\n* *vendor* folder is required for working of backend script named *tc-email-notifier.php*, so this folder should be placed at the same level with it;\r\n* *email* folder stores backend script settings and email messages templates. if you successfulye it into another place don\'t forget to change variable *$base_path* in file *tc-email-notifier.php*;\r\n* default and working directory structure is shown in *dist* folder;\r\n\r\n\r\n**USAGE**\r\n\r\nFor more info see working example in */example* folder. You can build it with command \r\n```\r\nyarn dev \\ npm run dev\r\n```\r\n\r\nPlugin required 2 objects for initialization: global settings and field settings.\r\n\r\n**global settings**\r\n```js\r\nlet options = {\r\n\t\tformId: \'callback\', /* id of callback form, where all fields and logic will be placed */\r\n\t\tbackendUrl: \'tc-email-notifier.php\', /* relative link to backend script, that will be executed after submit button pressed */\r\n\t\tisDebugMode: false, /* if true - some debug messages will be printed to console */\r\n\t\taddHiddenFields: true, /* if true - useragent, referrer, timezone, localtime, cookies will be send with all form data  */\r\n\t\taddGeolocation: true, /* if true - geolocation coords and google map will be send with all form data */\r\n\t\taddRecaptchaButton: true, /* if true - google recaptcha button \'i\'m not robot\' will be added */\r\n\t\tgoogleMapsApiKey: \'xxx\', /* to get it, go to google developer console */\r\n\t\tgoogleReCaptchaApiKey: \'xxx\', /* to get it, go to google developer console */\r\n\t\tonSuccess: (message) => {  alertify.alert(message); }, /* function that will be executed after form successfully submitted   */\r\n\t\tonError: (message) => {  alertify.alert(message); }, /* function that will be executed after form submitted with errors */\r\n\t};\r\n```\r\n\r\n**field settings**\r\n\r\ntypical input=text field:\r\n```js\r\nlet field = {\r\n\t\t\ttitleTag: \'<p class="title">Имя:</p>\',\r\n\t\t\tname: \'name\',\r\n\t\t\tid: \'name\',\r\n\t\t\ttype: \'text\',\r\n\t\t\tplaceholder: \'Введите свое имя\',\r\n\t\t\trequired: true,\r\n\t\t\tcssClass: \'name\',\r\n\t\t};\r\n```\r\n\r\ncheckbox and submit controls:\r\n```js\r\nlet controls = [{\r\n\t\t\tname: \'submit\',\r\n\t\t\tid: \'submit\',\r\n\t\t\ttype: \'submit\',\r\n\t\t\trole: \'submit\',\r\n\t\t\tvalue: \'Отправить\',\r\n\t\t\tparentClass: \'controls\'\r\n\t\t},\r\n\t\t{\r\n\t\t\ttitleTag: \'<p class="is-checked">С <a href="#">условиями обработки персональных</a> данных согласен:</p>\',\r\n\t\t\tname: \'is-checked\',\r\n\t\t\tid: \'is-checked\',\r\n\t\t\ttype: \'checkbox\',\r\n\t\t\trole: \'checkbox\',\r\n\t\t\trequired: true,\r\n\t\t\tparentClass: \'controls\'\r\n\t\t}];\r\n```\r\n\r\n**plugin init**\r\n```js\r\nnew TcEmailNotifier(options, fields);\r\n```\r\n\r\n',
+21 silly publish   readmeFilename: 'README.MD',
+21 silly publish   gitHead: '14be2369d2a0a7cffbc6cd875a48f17e776a6548',
+21 silly publish   _id: 'callback-form-email-notifier@1.0.15',
+21 silly publish   _shasum: 'ab20921a0ff57d52e983afeab3ca6b4b36fd4cbf',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name callback-form-email-notifier
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'callback-form-email-notifier',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'callback-form-email-notifier',
+26 silly mapToRegistry   name: 'callback-form-email-notifier',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/callback-form-email-notifier
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading C:\Users\RiskyWorks\AppData\Roaming\npm-cache\callback-form-email-notifier\1.0.15\package.tgz
+30 verbose request uri https://registry.npmjs.org/callback-form-email-notifier
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 09:53:15
+33 verbose request using bearer token for auth
+34 verbose request id bf9ab8ecb58e989e
+35 http request PUT https://registry.npmjs.org/callback-form-email-notifier
+36 http 403 https://registry.npmjs.org/callback-form-email-notifier
+37 verbose headers { date: 'Mon, 28 May 2018 04:53:16 GMT',
+37 verbose headers   'content-type': 'application/json',
+37 verbose headers   'transfer-encoding': 'chunked',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'set-cookie':
+37 verbose headers    [ '__cfduid=d19593c8643b3c8666466b41e4b71be061527483194; expires=Tue, 28-May-19 04:53:14 GMT; path=/; domain=.npmjs.org; HttpOnly; Secure',
+37 verbose headers      '__cfduid=d19593c8643b3c8666466b41e4b71be061527483194; expires=Tue, 28-May-19 04:53:14 GMT; path=/; domain=.npmjs.org; HttpOnly; Secure' ],
+37 verbose headers   'cf-ray': '421e1dcbde377666-ARN',
+37 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+37 verbose headers   server: 'cloudflare',
+37 verbose headers   'content-encoding': 'gzip' }
+38 verbose request invalidating C:\Users\RiskyWorks\AppData\Roaming\npm-cache\registry.npmjs.org\callback-form-email-notifier on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: You cannot publish over the previously published versions: 1.0.15. : callback-form-email-notifier
+40 verbose stack     at makeError (C:\Users\RiskyWorks\AppData\Roaming\nvm\v6.10.0\node_modules\npm\node_modules\npm-registry-client\lib\request.js:302:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (C:\Users\RiskyWorks\AppData\Roaming\nvm\v6.10.0\node_modules\npm\node_modules\npm-registry-client\lib\request.js:290:14)
+40 verbose stack     at C:\Users\RiskyWorks\AppData\Roaming\nvm\v6.10.0\node_modules\npm\node_modules\npm-registry-client\lib\request.js:216:7
+40 verbose stack     at Gunzip.onEnd (zlib.js:227:5)
+40 verbose stack     at emitNone (events.js:91:20)
+40 verbose stack     at Gunzip.emit (events.js:185:7)
+40 verbose stack     at endReadableNT (_stream_readable.js:974:12)
+40 verbose stack     at _combinedTickCallback (internal/process/next_tick.js:74:11)
+40 verbose stack     at process._tickCallback (internal/process/next_tick.js:98:9)
+41 verbose statusCode 403
+42 verbose pkgid callback-form-email-notifier
+43 verbose cwd D:\Workspaces\callback-form-email-notifier
+44 error Windows_NT 10.0.15063
+45 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "publish"
+46 error node v6.10.0
+47 error npm  v3.10.10
+48 error code E403
+49 error You cannot publish over the previously published versions: 1.0.15. : callback-form-email-notifier
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]

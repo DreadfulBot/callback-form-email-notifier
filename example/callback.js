@@ -76,6 +76,8 @@ function initCallbackForm() {
 		addRecaptchaButton: true,
 		googleMapsApiKey: 'xxx',
 		googleReCaptchaApiKey: 'xxx',
+		beforeSend: () => { alert('send'); },
+		afterSend: (message) => { alert(message); },
 		onSuccess: (message) => {  alertify.alert(message); },
 		onError: (message) => {  alertify.alert(message); },
 	};

@@ -76,12 +76,15 @@ export default class TcEmailNotifier {
 
 		formElement.addEventListener('submit', (e) => {
 			e.preventDefault();
+			if(this.options.beforeSend) this.options.beforeSend();
 			request({body: new FormData(e.target)})
 			.then(answer => {
-				this.options.onSuccess(answer);
+				if(this.options.afterSend) this.options.afterSend(answer);
+				if(this.options.onSuccess) this.options.onSuccess(answer);
 			})
 			.catch(error => {
-				this.options.onError(error);
+				if(this.options.afterSend) this.options.afterSend(error);
+				if(this.options.onError) this.options.onError(error);
 			});
 		});
 	}
