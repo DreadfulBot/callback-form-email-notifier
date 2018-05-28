@@ -58,29 +58,28 @@ try {
     $subject = $settingsWorker->getOption('sender', 'title');
     $to = $settingsWorker->getOption('receiver', 'to');
 
-    foreach (explode(',', $to) as $to) {
-        try {
-            $mail = new Message();
 
-            $mail->setFrom($from)
-                ->addTo($to)
-                ->setSubject($subject)
-                ->setHtmlBody($emailMessageTemplateWorker->getMessageTemplate());
+    try {
+        // email object
+        $mail = new Message();
 
+        $mail->setFrom($from)
+            ->setSubject($subject)
+            ->setHtmlBody($emailMessageTemplateWorker->getMessageTemplate());
 
-            // $mailer = new SendmailMailer;
-            // $mailer->send($mail);
-
-            $mailer = new Nette\Mail\SmtpMailer(array(
-                'host' => $settingsWorker->getOption('smtp', 'host'),
-                'username' => $settingsWorker->getOption('smtp', 'user'),
-                'password' => $settingsWorker->getOption('smtp', 'password')
-            ));
-
-            $mailer->send($mail);
-        } catch (Exception $e) {
-            throw new Exception('Не удалось отправить письмо адресату ' . $to . $e->getMessage());
+        foreach (explode(',', $to) as $to) {
+            $mail->addTo($to);
         }
+
+        $mailer = new Nette\Mail\SmtpMailer(array(
+            'host' => $settingsWorker->getOption('smtp', 'host'),
+            'username' => $settingsWorker->getOption('smtp', 'user'),
+            'password' => $settingsWorker->getOption('smtp', 'password')
+        ));
+
+        $mailer->send($mail);
+    } catch (Exception $e) {
+        throw new Exception('Не удалось отправить письмо адресату ' . $to . $e->getMessage());
     }
 
     JsonWorker::send("Сообщение было успешно отправлено", true);
